@@ -1,11 +1,11 @@
 
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:streetwear_events/screens/home/AppDrawer.dart';
 import 'package:streetwear_events/screens/home/EventTile.dart';
 
 import 'AppBar.dart';
+import 'CalendarScreen.dart';
 
 //GoogleMaps https://codelabs.developers.google.com/codelabs/google-maps-in-flutter#3
 
@@ -34,6 +34,7 @@ class _HomeState extends State<Home>{
           EventTile(),
         ]
     );
+    else if(_selectedIndex == 1) return CalendarScreen();
     else return Text(
       'Index 2: Website',
       style: optionStyle,
@@ -80,3 +81,5 @@ class _HomeState extends State<Home>{
   }
 
 }
+
+
