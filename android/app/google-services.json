@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "595579912015",
+    "project_id": "streetwearevents",
+    "storage_bucket": "streetwearevents.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:595579912015:android:4e4d820999b64e48368f3a",
+        "android_client_info": {
+          "package_name": "com.example.streetwear_events"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "595579912015-6be6eud38k3u3q4e41p03jqp88gashb5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD-fcBWie6mKBo2Z0cazrn0dlmE_uQJo6I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "595579912015-6be6eud38k3u3q4e41p03jqp88gashb5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
