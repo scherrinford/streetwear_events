@@ -2,6 +2,7 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:streetwear_events/screens/home/EventList.dart';
 
 class CalendarScreen extends StatefulWidget{
     @override
@@ -23,7 +24,7 @@ class _CalendarScreenState extends State<StatefulWidget>{
   }
 
   Widget _listViewTab(BuildContext context){
-    return Text("It's calendar view here");
+    return EventList();
   }
 
   @override

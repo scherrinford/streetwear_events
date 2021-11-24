@@ -2,6 +2,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:streetwear_events/screens/home/AppDrawer.dart';
+import 'package:streetwear_events/screens/home/EventList.dart';
 import 'package:streetwear_events/screens/home/EventTile.dart';
 
 import 'AppBar.dart';
@@ -28,12 +29,7 @@ class _HomeState extends State<Home>{
   }
 
   Widget _selectScreen(BuildContext context){
-    if(_selectedIndex == 0) return ListView(
-        children: <Widget>[
-          EventTile(),
-          EventTile(),
-        ]
-    );
+    if(_selectedIndex == 0) return EventList();
     else if(_selectedIndex == 1) return CalendarScreen();
     else return Text(
       'Index 2: Website',
