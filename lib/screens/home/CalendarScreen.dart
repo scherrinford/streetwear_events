@@ -1,8 +1,8 @@
-
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:streetwear_events/screens/home/CalendarWidget.dart';
 import 'package:streetwear_events/screens/home/EventList.dart';
+import 'package:streetwear_events/utilities/constants.dart';
 
 class CalendarScreen extends StatefulWidget{
     @override
@@ -20,11 +20,11 @@ class _CalendarScreenState extends State<StatefulWidget>{
   }
 
   Widget _calendarViewTab(BuildContext context){
-    return Text("It's calendar view here");
+    return CalendarWidget();
   }
 
   Widget _listViewTab(BuildContext context){
-    return EventList();
+    return EventList(Axis.vertical, 0, 20);
   }
 
   @override
@@ -35,17 +35,21 @@ class _CalendarScreenState extends State<StatefulWidget>{
         length: 2,
         child: Scaffold(
           appBar: AppBar(
-            backgroundColor: Color(0xff755540),
-            title: Text(_selectedTabLabel),
+            backgroundColor: Colors.white,
+            title: Text("Events", style: titleTextStyle),
             bottom: TabBar(
               onTap: _switchTabLabel,
               indicatorColor: Color(0xff342013),
+              labelColor: Colors.black87,
+              unselectedLabelColor: Colors.grey,
               tabs: <Widget>[
                 Tab(
-                  icon: Icon(Icons.calendar_today),
+                  text: "Calendar",
+                  //icon: Icon(Icons.calendar_today),
                 ),
                 Tab(
-                  icon: Icon(Icons.calendar_view_day),
+                  text: "List",
+                  //icon: Icon(Icons.calendar_view_day),
                 ),
               ],
             ),
@@ -53,10 +57,16 @@ class _CalendarScreenState extends State<StatefulWidget>{
           body: TabBarView(
             children: <Widget>[
               Center(
-                child: _calendarViewTab(context),
+                child: Container(
+                    margin: EdgeInsets.only(left: 30.0, right: 30.0),
+                    child: _calendarViewTab(context),
+                ),
               ),
               Center(
-                child: _listViewTab(context),
+                child: Container(
+                  margin: EdgeInsets.only(left: 30.0, right: 30.0),
+                  child: _listViewTab(context),
+                ),
               ),
             ],
           ),

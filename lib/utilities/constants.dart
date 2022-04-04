@@ -22,3 +22,19 @@ final kBoxDecorationStyle = BoxDecoration(
     ),
   ],
 );
+
+final titleTextStyle = TextStyle(
+  color: Color(0xFF393939),
+  fontFamily: 'OpenSans',
+  fontSize: 30.0,
+  fontWeight: FontWeight.bold,
+);
+
+final smallTitleTextStyle = TextStyle(
+  color: Color(0xFF393939),
+  fontFamily: 'OpenSans',
+  fontSize: 18.0,
+  fontWeight: FontWeight.bold,
+);
+
+final backgroundImage = AssetImage('assets/images/round-2-nyc-grand-opening-9.jpg');

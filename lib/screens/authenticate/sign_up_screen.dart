@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:streetwear_events/services/auth.dart';
 import 'package:streetwear_events/utilities/constants.dart';
 import 'package:streetwear_events/screens/authenticate/login_screen.dart';
 
@@ -13,7 +14,8 @@ class SignUpScreen extends StatefulWidget {
 class _SignUpScreenState extends State<SignUpScreen>{
    bool _rememberMe = false;
   bool loading = false;
- // final AuthService _auth = AuthService();
+
+  final AuthService _auth = AuthService();
   final _formKey = GlobalKey<FormState>();
   String email ='';
   String password = '';
@@ -27,10 +29,17 @@ class _SignUpScreenState extends State<SignUpScreen>{
       backgroundColor: Colors.brown[100],
       body: Container(
         decoration: BoxDecoration(
-       image: DecorationImage(
-       image: AssetImage("assets/images/tlo.jpeg"),
-       fit: BoxFit.cover,
-        ),
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              Color(0xFFA78975),
+              Color(0xFF927461),
+              Color(0xFF866550),
+              Color(0xFF755540),
+            ],
+            stops: [0.1, 0.4, 0.7, 0.9],
+          ),
         ),
         height: double.infinity,
         width: double.infinity,
@@ -65,35 +74,35 @@ class _SignUpScreenState extends State<SignUpScreen>{
               _buildPhoneTF(),
               SizedBox(height: 20),
                RaisedButton(
-                                        padding: EdgeInsets.all(15.0),
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(30.0),
-                                        ),
-                                        color: Color(0xFFFDFDFD),
-                                        child: Text(
-                                          'REGISTER',
-                                          style: TextStyle(
-                                            color: Color(0xFFECB6B6),
-                                            letterSpacing: 1.5,
-                                            fontSize: 18.0,
-                                            fontWeight: FontWeight.bold,
-                                            fontFamily: 'OpenSans',
-                                          ),
-                                        ),
+                  padding: EdgeInsets.all(15.0),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30.0),
+                  ),
+                  color: Color(0xFFFDFDFD),
+                  child: Text(
+                    'REGISTER',
+                    style: TextStyle(
+                      color: Color(0xFFECB6B6),
+                      letterSpacing: 1.5,
+                      fontSize: 18.0,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'OpenSans',
+                    ),
+                  ),
                 onPressed:() async{
                   if(_formKey.currentState.validate())
                   {
                     print(email);
                     print(password);
                     setState(()=> loading = true);
-                   // dynamic result = await _auth.registerwithEmailandPassword(email, password, name, phone);
-                   //  if(result == null)
-                   //  {
-                   //    setState((){
-                   //      error='Data user already exist or you pass wrong email';
-                   //      loading = false;
-                   //    });
-                   //  }
+                   dynamic result = await _auth.registerWithEmailAndPassword(email, password, name, phone);
+                    if(result == null)
+                    {
+                      setState((){
+                        error='Data user already exist or you pass wrong email';
+                        loading = false;
+                      });
+                    }
                   }
                 } ,
                ),

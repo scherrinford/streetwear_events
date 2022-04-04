@@ -2,7 +2,7 @@
 // import 'package:flutter/material.dart';
 // import 'package:flutter/services.dart';
 // import 'package:streetwear_events/models/userr.dart';
-// import 'package:streetwear_events/screens/authenticate/authenticate.dart';
+// import 'package:streetwear_events/screens/authenticate/Authenticate.dart';
 // import 'package:streetwear_events/screens/authenticate/login_screen.dart';
 // import 'package:streetwear_events/screens/home/Home.dart';
 // import 'package:streetwear_events/utilities/constants.dart';

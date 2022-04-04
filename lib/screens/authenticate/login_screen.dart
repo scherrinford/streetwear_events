@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:streetwear_events/screens/authenticate/sign_up_screen.dart';
+import 'package:streetwear_events/services/auth.dart';
 import 'package:streetwear_events/utilities/constants.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -14,6 +15,12 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   bool _rememberMe = false;
+  bool loading = false;
+  final AuthService _auth = AuthService();
+
+  String email ='';
+  String password ='';
+  String error='';
 
   Widget _buildEmailTF() {
     return Column(
@@ -29,6 +36,9 @@ class _LoginScreenState extends State<LoginScreen> {
           decoration: kBoxDecorationStyle,
           height: 60.0,
           child: TextField(
+            onChanged:(val){
+              setState(()=> email = val);
+            },
             keyboardType: TextInputType.emailAddress,
             style: TextStyle(
               color: Colors.white,
@@ -64,6 +74,9 @@ class _LoginScreenState extends State<LoginScreen> {
           decoration: kBoxDecorationStyle,
           height: 60.0,
           child: TextField(
+            onChanged:(val){
+              setState(()=> password = val);
+            },
             obscureText: true,
             style: TextStyle(
               color: Colors.white,
@@ -132,7 +145,23 @@ class _LoginScreenState extends State<LoginScreen> {
       width: double.infinity,
       child: RaisedButton(
         elevation: 5.0,
-        onPressed: () => print('Login Button Pressed'),
+        onPressed: () async {
+          print('Login Button Pressed');
+          print(password);
+          print(email);
+          setState(()=>loading=true);
+          dynamic result = await _auth.signInWithEmailAndPassword(email, password);
+          if(result ==null)
+          {
+            print('something goes wrong');
+            setState((){
+              error = "Wrong email or password";
+              loading = false;
+            });
+          }else{
+            print('login correct');
+          }
+        },
         padding: EdgeInsets.all(15.0),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(30.0),
@@ -251,6 +280,15 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Color(0xFF755540),
+        // title: IconButton(
+        //   icon: Icon(Icons.arrow_back),
+        //   onPressed: () {
+        //     Navigator.pop(context);
+        //   },
+        // ),
+      ),
       body: AnnotatedRegion<SystemUiOverlayStyle>(
         value: SystemUiOverlayStyle.light,
         child: GestureDetector(
@@ -265,10 +303,10 @@ class _LoginScreenState extends State<LoginScreen> {
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
                     colors: [
-                      Color(0xFF73AEF5),
-                      Color(0xFF61A4F1),
-                      Color(0xFF478DE0),
-                      Color(0xFF398AE5),
+                      Color(0xFFA78975),
+                      Color(0xFF927461),
+                      Color(0xFF866550),
+                      Color(0xFF755540),
                     ],
                     stops: [0.1, 0.4, 0.7, 0.9],
                   ),
@@ -280,7 +318,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   physics: AlwaysScrollableScrollPhysics(),
                   padding: EdgeInsets.symmetric(
                     horizontal: 40.0,
-                    vertical: 120.0,
+                    vertical: 60.0,
                   ),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
