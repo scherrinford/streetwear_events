@@ -12,7 +12,7 @@ final kLabelStyle = TextStyle(
 );
 
 final kBoxDecorationStyle = BoxDecoration(
-  color: Color(0xFF755540),
+  color: themeDarkColor,
   borderRadius: BorderRadius.circular(10.0),
   boxShadow: [
     BoxShadow(
@@ -36,5 +36,9 @@ final smallTitleTextStyle = TextStyle(
   fontSize: 18.0,
   fontWeight: FontWeight.bold,
 );
+
+final themeDarkColor = Color(0xFF755540);
+final themeLightColor = Color(0xFFF2EFE5);
+final mainThemeColor = Color(0xFF755540);
 
 final backgroundImage = AssetImage('assets/images/round-2-nyc-grand-opening-9.jpg');
