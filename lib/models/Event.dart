@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
 
 class Event{
   final String uid;
@@ -12,7 +11,14 @@ class Event{
   //final String photoUrl;
 
 
-  Event(this.uid, this.name, this.description, this.location, this.eventId, this.date, );
+  Event({
+    required this.uid,
+    required this.name,
+    required this.description,
+    required this.location,
+    required this.eventId,
+    required this.date,
+  });
 
   Map<String,dynamic> toMap(){
     return {
@@ -27,7 +33,7 @@ class Event{
   Event.fromSnapchot(DocumentSnapshot snapshot)
       : eventId = snapshot['eventId'],
         name = snapshot['name'],
-        date = (snapshot['date'] as Timestamp)?.toDate(),
+        date = (snapshot['date'] as Timestamp).toDate(),
         location = snapshot['location'],
         description = snapshot['description'],
         uid = snapshot['uid'];
@@ -35,7 +41,7 @@ class Event{
   Event.fromFirestore(Map<String, dynamic> firestore)
       : eventId = firestore['eventId'],
         name = firestore['name'],
-        date = (firestore['date'] as Timestamp)?.toDate(),
+        date = (firestore['date'] as Timestamp).toDate(),
         location = firestore['location'],
         description = firestore['description'],
         uid = firestore['uid'];

@@ -1,13 +1,15 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:streetwear_events/screens/authenticate/sign_up_screen.dart';
+import 'package:streetwear_events/screens/home/Home.dart';
 import 'package:streetwear_events/services/auth.dart';
 import 'package:streetwear_events/utilities/constants.dart';
 
 class LoginScreen extends StatefulWidget {
 
   final Function toogleView;
-  LoginScreen({this.toogleView});
+  LoginScreen({required this.toogleView});
   @override
   _LoginScreenState createState() => _LoginScreenState();
 
@@ -125,7 +127,7 @@ class _LoginScreenState extends State<LoginScreen> {
               activeColor: Colors.white,
               onChanged: (value) {
                 setState(() {
-                  _rememberMe = value;
+                  _rememberMe = value!;
                 });
               },
             ),
@@ -145,23 +147,7 @@ class _LoginScreenState extends State<LoginScreen> {
       width: double.infinity,
       child: RaisedButton(
         elevation: 5.0,
-        onPressed: () async {
-          print('Login Button Pressed');
-          print(password);
-          print(email);
-          setState(()=>loading=true);
-          dynamic result = await _auth.signInWithEmailAndPassword(email, password);
-          if(result ==null)
-          {
-            print('something goes wrong');
-            setState((){
-              error = "Wrong email or password";
-              loading = false;
-            });
-          }else{
-            print('login correct');
-          }
-        },
+        onPressed: _signIn,
         padding: EdgeInsets.all(15.0),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(30.0),
@@ -202,7 +188,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Widget _buildSocialBtn(Function onTap, AssetImage logo) {
     return GestureDetector(
-      onTap: onTap,
+      onTap: onTap(),
       child: Container(
         height: 60.0,
         width: 60.0,
@@ -353,5 +339,35 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
       ),
     );
+  }
+  
+  Future _signIn() async {
+    print('Login Button Pressed');
+    print(password);
+    print(email);
+    setState(()=>loading=true);
+    try{
+      dynamic result = await FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: password);
+      if(result ==null)
+      {
+        print('something goes wrong');
+        setState((){
+          error = "Wrong email or password";
+          loading = false;
+        });
+      }else{
+        print('login correct');
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => Home()),
+        );
+      }
+    } on FirebaseAuthException catch(e){
+      print(e);
+      error = e.message!;
+      loading = false;
+    }
+
+
   }
 }

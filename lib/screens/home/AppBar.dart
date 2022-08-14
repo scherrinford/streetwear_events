@@ -1,20 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:streetwear_events/models/user_data.dart';
+import 'package:streetwear_events/utilities/constants.dart';
 
 class BaseAppBar extends StatelessWidget implements PreferredSizeWidget {
+
   final Color backgroundColor = Colors.red;
   final Text title;
   final AppBar appBar;
   final List<Widget> widgets;
 
-  const BaseAppBar({Key key, this.title, this.appBar, this.widgets})
-      : super(key: key);
+  const BaseAppBar({required this.title, required this.appBar, required this.widgets});
 
   @override
   Widget build(BuildContext context) {
 
     return AppBar(
-        title: const Text('User'),
-        backgroundColor: Color(0xFF755540),
+        title: title,
+        backgroundColor: themeDarkColor,
     );
   }
 

@@ -2,7 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:streetwear_events/models/AppUser.dart';
+import 'package:streetwear_events/models/user_data.dart';
+import 'package:streetwear_events/screens/home/DetailScreen.dart';
+import 'package:streetwear_events/screens/home/Home.dart';
 import 'package:streetwear_events/services/auth.dart';
 import 'package:streetwear_events/services/database.dart';
 import 'package:streetwear_events/utilities/constants.dart';
@@ -24,10 +26,10 @@ class _AddNewEventsScreenState extends State<StatefulWidget>{
   DateTime _date = DateTime.now();
   TimeOfDay _time = TimeOfDay.now();
 
-  String _name;
-  String _location;
-  String _city;
-  String _description;
+  String _name = '';
+  String _location = '';
+  String _city = '';
+  String _description = '';
 
   final _formKey = GlobalKey<FormState>();
 
@@ -40,7 +42,7 @@ class _AddNewEventsScreenState extends State<StatefulWidget>{
   }
 
   void _selectDate() async {
-    final DateTime newDate = await showDatePicker(
+    final DateTime? newDate = await showDatePicker(
       context: context,
       initialDate: _date,
       firstDate: DateTime(DateTime.now().year-1, 1, 1),
@@ -57,7 +59,7 @@ class _AddNewEventsScreenState extends State<StatefulWidget>{
   }
 
   void _selectTime() async {
-    TimeOfDay pickedTime =  await showTimePicker(
+    TimeOfDay? pickedTime =  await showTimePicker(
       initialTime: _time,
       context: context,
     );
@@ -76,11 +78,11 @@ class _AddNewEventsScreenState extends State<StatefulWidget>{
 
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<AppUser>(context);
+    final user = Provider.of<UserData>(context);
     print(user);
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color(0xFF755540),
+        backgroundColor: themeDarkColor,
       ),
       body: Container(
         height: double.infinity,
@@ -101,7 +103,7 @@ class _AddNewEventsScreenState extends State<StatefulWidget>{
                 ),
                 SizedBox(height: 50),
                 TextFormField(
-                  validator: (val)=> val.isEmpty? "Enter Name" : null,
+                  validator: (val)=> val!.isEmpty? "Enter Name" : null,
                   onChanged: (val){
                     setState(()=>_name=val);
                   },
@@ -112,7 +114,7 @@ class _AddNewEventsScreenState extends State<StatefulWidget>{
                 ),
                 SizedBox(height: 20),
                 TextFormField(
-                  validator: (val)=> val.isEmpty? "Enter Place" : null,
+                  validator: (val)=> val!.isEmpty? "Enter Place" : null,
                   onChanged: (val){
                     setState(()=>_location=val);
                   },
@@ -123,7 +125,7 @@ class _AddNewEventsScreenState extends State<StatefulWidget>{
                 ),
                 SizedBox(height: 20),
                 TextFormField(
-                  validator: (val)=> val.isEmpty? "Enter City" : null,
+                  validator: (val)=> val!.isEmpty? "Enter City" : null,
                   onChanged: (val){
                     setState(()=>_city=val);
                   },
@@ -134,7 +136,7 @@ class _AddNewEventsScreenState extends State<StatefulWidget>{
                 ),
                 SizedBox(height: 20),
                 TextFormField(
-                  validator: (val)=> val.isEmpty? "Enter Date" : null,
+                  validator: (val)=> val!.isEmpty? "Enter Date" : null,
                   controller: dateInput,
                   readOnly: true,
                   onTap: _selectDate,
@@ -145,7 +147,7 @@ class _AddNewEventsScreenState extends State<StatefulWidget>{
                 ),
                 SizedBox(height: 20),
                 TextFormField(
-                  validator: (val)=> val.isEmpty? "Enter Time" : null,
+                  validator: (val)=> val!.isEmpty? "Enter Time" : null,
                   controller: timeInput,
                   readOnly: true,
                   onTap: _selectTime,
@@ -156,7 +158,7 @@ class _AddNewEventsScreenState extends State<StatefulWidget>{
                 ),
                 SizedBox(height: 20),
                 TextFormField(
-                  validator: (val)=> val.isEmpty? "Enter Description" : null,
+                  validator: (val)=> val!.isEmpty? "Enter Description" : null,
                   onChanged: (val){
                     setState(()=>_description=val);
                   },
@@ -176,11 +178,11 @@ class _AddNewEventsScreenState extends State<StatefulWidget>{
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30.0),
                   ),
-                  color: Color(0xFF755540),
+                  color: themeDarkColor,
                   child: Text(
                     'SUBMIT',
                     style: TextStyle(
-                      color: Color(0xFFFDFDFD),
+                      color: themeLightColor,
                       letterSpacing: 1.5,
                       fontSize: 18.0,
                       fontWeight: FontWeight.bold,
@@ -188,11 +190,14 @@ class _AddNewEventsScreenState extends State<StatefulWidget>{
                     ),
                   ),
                   onPressed:() async {
-                    if (_formKey.currentState.validate()) {
-                        if(user != null){
-                          _date = new DateTime(_date.year, _date.month, _date.day, _time.hour, _time.minute);
-                          await DatabaseService(uid: user.uid).saveEvent(_name, _description, _location, _date);
-                        }
+                    if (_formKey.currentState!.validate()) {
+                        _date = new DateTime(_date.year, _date.month, _date.day, _time.hour, _time.minute);
+                        await DatabaseService(uid: user.uid).saveEvent(_name, _description, _location, _date);
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => Home()),
+                        );
+                        // return Home();
                     }
                   }
 

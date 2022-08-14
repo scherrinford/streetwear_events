@@ -1,15 +1,21 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:streetwear_events/models/AppUser.dart';
+import 'package:streetwear_events/models/user_data.dart';
 
-import 'package:streetwear_events/screens/authenticate/Authenticate.dart';
+import 'package:streetwear_events/screens/authenticate/authenticate_wrapper.dart';
 import 'package:streetwear_events/screens/home/UserProfileScreen.dart';
 import 'package:streetwear_events/screens/home/events/AddNewEventsScreen.dart';
 import 'package:streetwear_events/services/auth.dart';
 
+import '../../services/database.dart';
+import '../../utilities/constants.dart';
+
 class AppDrawer extends StatefulWidget {
+  // final UserData user;
+  // AppDrawer({required this.user});
 
   @override
   _AppDrawerState createState() => _AppDrawerState();
@@ -17,12 +23,15 @@ class AppDrawer extends StatefulWidget {
 
 class _AppDrawerState extends State<AppDrawer> {
 
+  DatabaseService _databaseService = DatabaseService(uid: FirebaseAuth.instance.currentUser!.uid);
+  UserData? user;
+
   Widget _logIn(){
     return ListTile(
       leading: Icon(Icons.login),
       title: Text('LogIn'),
       onTap: () {
-        return Navigator.of(context).push(MaterialPageRoute(builder: (context) => Authenticate()));
+        Navigator.of(context).push(MaterialPageRoute(builder: (context) => AuthenticateWrapper()));
       },
     );
   }
@@ -42,15 +51,15 @@ class _AppDrawerState extends State<AppDrawer> {
       leading: Icon(Icons.account_circle),
       title: Text('Profile'),
       onTap: () async {
-        final currentUserId = Provider.of<AppUser>(context, listen: false);
-        final moviesRef = FirebaseFirestore.instance.collection('users').withConverter<UserData>( ///TODO refactoring
-          fromFirestore: (snapshot, _) => UserData.fromFirestore(snapshot.data()),
-          toFirestore: (movie, _) => movie.toMap(),
-        );
-        print(currentUserId.uid);
-        UserData currentUser = await moviesRef.doc(currentUserId.uid).get().then((snapshot) => snapshot.data());
+        // final currentUserId = Provider.of<UserData>(context, listen: false);
+        // final moviesRef = FirebaseFirestore.instance.collection('users').withConverter<UserData>( ///TODO refactoring
+        //   fromFirestore: (snapshot, _) => UserData.fromFirestore(snapshot.data()),
+        //   toFirestore: (movie, _) => movie.toMap(),
+        // );
+        // print(currentUserId.uid);
+        UserData currentUser = _databaseService.getUserById(user?.uid) as UserData;//moviesRef.doc(currentUserId.uid).get().then((snapshot) => snapshot.data() );
         print(currentUser.name);
-        return Navigator.of(context).push(MaterialPageRoute(builder: (context) => UserProfileScreen(user: currentUser,))); //
+        Navigator.of(context).push(MaterialPageRoute(builder: (context) => UserProfileScreen(user: currentUser,))); //
       },
     );
   }
@@ -70,7 +79,7 @@ class _AppDrawerState extends State<AppDrawer> {
       leading: Icon(Icons.add),
       title: Text('Add New Event'),
       onTap: () {
-        return Navigator.of(context).push(MaterialPageRoute(builder: (context) => AddNewEventsScreen()));
+        Navigator.of(context).push(MaterialPageRoute(builder: (context) => AddNewEventsScreen()));
       },
     );
   }
@@ -95,19 +104,31 @@ class _AppDrawerState extends State<AppDrawer> {
     );
   }
 
-  Widget _loggedUser(BuildContext context, AppUser user, AuthService auth){
+  _getCurrentUserData() async {
+    // final currentUserId = Provider.of<UserData>(context, listen: false);
+    // final moviesRef = FirebaseFirestore.instance.collection('users').withConverter<UserData>( ///TODO refactoring
+    //   fromFirestore: (snapshot, _) => UserData.fromFirestore(snapshot.data()),
+    //   toFirestore: (movie, _) => movie.toMap(),
+    // );
+    // print(currentUserId.uid);
+    UserData currentUser = _databaseService.getUserById(user?.uid) as UserData; //await moviesRef.doc(currentUserId.uid).get().then((snapshot) => snapshot.data());
+    print(currentUser.name);
+  }
+
+  Widget _loggedUser(BuildContext context, AuthService _auth){
+
     return Drawer(
       child: ListView(
         padding: EdgeInsets.zero,
         children: <Widget>[
           DrawerHeader(
             decoration: BoxDecoration(
-              color: Color(0xFF755540),
+              color: themeDarkColor,
             ),
             child: Text(
-              'User Name',
+              'aaaa',
               style: TextStyle(
-                color: Color(0xFFF0E4CB),
+                color: themeLightColor,
                 fontSize: 24,
               ),
             ),
@@ -117,20 +138,21 @@ class _AppDrawerState extends State<AppDrawer> {
           _addNewEvent(),
           _addOnlineStore(),
           _addStationaryStore(),
-          _logOut(auth)
+          _logOut(_auth)
         ],
       ),
     );
   }
 
   Widget _unloggedUser(BuildContext context){
+
     return Drawer(
       child: ListView(
         padding: EdgeInsets.zero,
         children: <Widget>[
           DrawerHeader(
             decoration: BoxDecoration(
-              color: Color(0xFF755540),
+              color: themeDarkColor,
             ),
             child: Text(
               ' ',
@@ -148,15 +170,20 @@ class _AppDrawerState extends State<AppDrawer> {
 
   @override
   Widget build(BuildContext context) {
-
-    final _user =Provider.of<AppUser>(context);
+    // https://firebase.flutter.dev/docs/auth/usage/
+    user = Provider.of<UserData>(context);
     final AuthService _auth = AuthService();
 
-    print(_user);
-    if(_user == null){
+    // final FirebaseAuth auth = FirebaseAuth.instance;
+    // final User? user = auth.currentUser;
+
+
+
+    // print(_auth.us.name);
+    if(user == null){
       return _unloggedUser(context);
     }else {
-      return _loggedUser(context, _user, _auth);
+      return _loggedUser(context, _auth);
     }
   }
 

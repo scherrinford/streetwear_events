@@ -1,21 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:streetwear_events/screens/authenticate/login_screen.dart';
 import 'package:streetwear_events/screens/authenticate/sign_up_screen.dart';
+import 'package:streetwear_events/screens/home/Home.dart';
 
-class Authenticate extends StatefulWidget {
+class AuthenticateWrapper extends StatefulWidget {
   @override
-  _AuthenticateState createState()=>_AuthenticateState();
+  _AuthenticateWrapperState createState()=>_AuthenticateWrapperState();
 }
 
-class _AuthenticateState extends State<Authenticate>{
+class _AuthenticateWrapperState extends State<AuthenticateWrapper>{
   
-  bool showsignIn =true;
+  bool showsignIn = true;
+
   void toogleView(){
     setState(()=>showsignIn = !showsignIn);
   }
 
   @override 
   Widget build(BuildContext context){
+
     if(showsignIn){
       return LoginScreen(toogleView: toogleView);
     }else{

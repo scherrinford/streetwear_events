@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:streetwear_events/models/Event.dart';
 
-import 'CalendarScreen.dart';
+import '../../../utilities/constants.dart';
+import '../CalendarScreen.dart';
 import 'EventTile.dart';
 
 class EventList extends StatefulWidget{
@@ -27,7 +28,7 @@ class _EventListState extends State<EventList>{
       child: Card(
           margin: const EdgeInsets.only(right: 20),
           elevation: 5,
-          color: Color(0xFFF2EFE5),
+          color: themeLightColor,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
           ),
@@ -36,7 +37,7 @@ class _EventListState extends State<EventList>{
             height: 240,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20.0),
-              color: Color(0xFFF2EFE5),
+              color: themeLightColor,
             ),
             child: Icon(
               Icons.add,

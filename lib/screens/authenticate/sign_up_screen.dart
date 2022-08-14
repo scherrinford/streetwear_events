@@ -1,12 +1,16 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:streetwear_events/services/auth.dart';
 import 'package:streetwear_events/utilities/constants.dart';
 import 'package:streetwear_events/screens/authenticate/login_screen.dart';
 
+import '../home/Home.dart';
+
 class SignUpScreen extends StatefulWidget {
   final Function toogleView;
-  SignUpScreen({this.toogleView});
+  SignUpScreen({required this.toogleView});
   @override
   _SignUpScreenState createState() => _SignUpScreenState();
 }
@@ -90,18 +94,25 @@ class _SignUpScreenState extends State<SignUpScreen>{
                     ),
                   ),
                 onPressed:() async{
-                  if(_formKey.currentState.validate())
+                  if(_formKey.currentState!.validate())
                   {
                     print(email);
                     print(password);
                     setState(()=> loading = true);
-                   dynamic result = await _auth.registerWithEmailAndPassword(email, password, name, phone);
+                   dynamic result = await FirebaseAuth.instance.createUserWithEmailAndPassword(email: email, password: password);//_auth.registerWithEmailAndPassword(email, password, name, phone);
                     if(result == null)
                     {
                       setState((){
                         error='Data user already exist or you pass wrong email';
                         loading = false;
                       });
+                    } else{
+                      error='Created Account';
+                      loading = false;
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => Home()),
+                      );
                     }
                   }
                 } ,
@@ -204,7 +215,7 @@ class _SignUpScreenState extends State<SignUpScreen>{
           decoration: kBoxDecorationStyle,
           height: 60.0,
           child: TextFormField(                                        
-            validator: (val)=> val.length <6 ? "Enter a password 6+" : null,        
+            validator: (val)=> val!.length <6 ? "Enter a password 6+" : null,
             onChanged: (val){
               setState(()=>password=val);
             },
@@ -279,7 +290,7 @@ class _SignUpScreenState extends State<SignUpScreen>{
           decoration: kBoxDecorationStyle,
           height: 60.0,
           child: TextFormField(
-            validator: (val)=> val.isEmpty? "Enter Name" : null,
+            validator: (val)=> val!.isEmpty? "Enter Name" : null,
             onChanged: (val){
               setState(()=>name=val);
             },

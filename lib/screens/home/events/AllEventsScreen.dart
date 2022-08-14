@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:streetwear_events/screens/home/EventList.dart';
+import 'package:streetwear_events/screens/home/events/EventList.dart';
 import 'package:streetwear_events/utilities/constants.dart';
 
-import 'CalendarScreen.dart';
+import '../CalendarScreen.dart';
 
 class AllEventsList extends StatefulWidget{
   @override
@@ -11,7 +11,7 @@ class AllEventsList extends StatefulWidget{
 }
 
 class _AllEventsListState extends State<StatefulWidget>{
-  String dropdownValue;
+  String dropdownValue = 'select';
 
   Widget _dropDownListLocation(BuildContext context){ ///TODO figure out how to get location (city) list
     return DropdownButton<String>(
@@ -24,9 +24,9 @@ class _AllEventsListState extends State<StatefulWidget>{
         color: Colors.grey,
       ),
       underline: SizedBox(),
-      onChanged: (String newValue) {
+      onChanged: (String? newValue) {
         setState(() {
-          dropdownValue = newValue;
+          dropdownValue = newValue!;
         });
       },
       items: <String>['Warszawa', 'Kraków']
@@ -50,9 +50,9 @@ class _AllEventsListState extends State<StatefulWidget>{
         color: Colors.grey,
       ),
       underline: SizedBox(),
-      onChanged: (String newValue) {
+      onChanged: (String? newValue) {
         setState(() {
-          dropdownValue = newValue;
+          dropdownValue = newValue!;
         });
       },
       items: <String>['Warszawa', 'Kraków']
@@ -74,7 +74,7 @@ class _AllEventsListState extends State<StatefulWidget>{
     return Scaffold(
         appBar: AppBar(
           title: Text('Title'),
-          backgroundColor: Color(0xFF755540),
+          backgroundColor: themeDarkColor,
         ),
         body: Container(
           child: SafeArea(

@@ -4,7 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:streetwear_events/models/AppUser.dart';
+import 'package:streetwear_events/models/user_data.dart';
 import 'package:streetwear_events/models/Event.dart';
 import 'package:streetwear_events/services/database.dart';
 import 'package:streetwear_events/utilities/constants.dart';
@@ -16,7 +16,7 @@ class DetailScreen extends StatefulWidget{
 
   final Event event;
   final UserData user;
-  DetailScreen({this.event, this.user});
+  DetailScreen({required this.event, required this.user});
   @override
   _DetailScreenState createState() => _DetailScreenState();
 }
@@ -48,7 +48,7 @@ class _DetailScreenState extends State<DetailScreen> {
             //height: 238,
             //constraints: BoxConstraints.tightFor(height: 221.0),
             decoration: BoxDecoration(
-              color: Color(0xFFF2EFE5),
+              color: themeLightColor,
               image: new DecorationImage(
                   image: NetworkImage('https://hypebeast.com/image/2017/10/round-2-nyc-grand-opening-9.jpg'),
                   fit: BoxFit.cover, //BoxFit.fitWidth,
@@ -60,7 +60,7 @@ class _DetailScreenState extends State<DetailScreen> {
               child: //ren: [
                 Card(
                   elevation: 25,
-                  color: Color(0xFFF2EFE5),
+                  color: themeLightColor,
                   margin: const EdgeInsets.only(top: 230),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.only(
@@ -113,7 +113,7 @@ class _DetailScreenState extends State<DetailScreen> {
                                 ),
                               ),
                             ),
-                            Text(widget.user.name, style: smallTitleTextStyle)
+                            Text(widget.user.name as String, style: smallTitleTextStyle)
                           ],
                         ),
                         SizedBox(height: 20),

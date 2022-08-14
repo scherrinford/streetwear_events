@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:streetwear_events/screens/home/CalendarWidget.dart';
-import 'package:streetwear_events/screens/home/EventList.dart';
+import 'package:streetwear_events/screens/home/events/EventList.dart';
 import 'package:streetwear_events/utilities/constants.dart';
 
 class CalendarScreen extends StatefulWidget{

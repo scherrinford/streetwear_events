@@ -1,13 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:streetwear_events/models/AppUser.dart';
-import 'package:streetwear_events/screens/home/EventList.dart';
+import 'package:streetwear_events/models/user_data.dart';
+import 'package:streetwear_events/screens/home/events/EventList.dart';
 import 'package:streetwear_events/utilities/constants.dart';
 
 class UserProfileScreen extends StatefulWidget {
 
   final UserData user;
-  UserProfileScreen({this.user});
+  UserProfileScreen({required this.user});
   @override
   _UserProfileScreenState createState() => _UserProfileScreenState();
 }
@@ -20,7 +20,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
 
   Widget _buildSocialBtn(Function onTap, AssetImage logo) {
     return GestureDetector(
-      onTap: onTap,
+      onTap: onTap(),
       child: Container(
         height: 60.0,
         width: 60.0,
@@ -69,7 +69,9 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(), ///TODO add edit icon button
+      appBar: AppBar(
+        backgroundColor: themeDarkColor,
+      ), ///TODO add logic to edit icon button
       body: Container(
         child: Padding(
           padding: const EdgeInsets.all(20.0),
@@ -91,7 +93,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                           ),
                         )
                     ),
-                    Text(widget.user.name),
+                    Text(widget.user.name as String),
                     SizedBox(width: 50), ///TODO refactoring
                     ElevatedButton(
                         onPressed: () async {

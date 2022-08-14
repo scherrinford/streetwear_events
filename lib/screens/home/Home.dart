@@ -1,9 +1,13 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:streetwear_events/screens/home/AllEventsScreen.dart';
+import 'package:provider/provider.dart';
+import 'package:streetwear_events/models/user_data.dart';
+import 'package:streetwear_events/screens/home/events/AllEventsScreen.dart';
 import 'package:streetwear_events/screens/home/AppDrawer.dart';
-import 'package:streetwear_events/screens/home/EventList.dart';
-import 'package:streetwear_events/screens/home/EventTile.dart';
+import 'package:streetwear_events/screens/home/events/EventList.dart';
+import 'package:streetwear_events/screens/home/events/EventTile.dart';
+import 'package:streetwear_events/screens/home/GoogleMapScreen.dart';
 import 'package:streetwear_events/screens/home/UserProfileScreen.dart';
 import 'package:streetwear_events/utilities/constants.dart';
 
@@ -14,17 +18,23 @@ import 'events/AddNewEventsScreen.dart';
 //GoogleMaps https://codelabs.developers.google.com/codelabs/google-maps-in-flutter#3
 
 class Home extends StatefulWidget{
+  // final UserData currentUser;
+  // Home({required this.currentUser})
+
   @override
   _HomeState createState() => _HomeState();
 }
 
 class _HomeState extends State<Home>{
 
+  final FirebaseAuth auth = FirebaseAuth.instance;
+
   int _selectedIndex = 0;
   static const TextStyle optionStyle =
   TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
 
   bool _isLogged = false;
+
 
   void _onItemTapped(int index) {
     setState(() {
@@ -35,7 +45,7 @@ class _HomeState extends State<Home>{
   Widget _selectScreen(BuildContext context){
     if(_selectedIndex == 0) return _homeScreen(context);
     else if(_selectedIndex == 1) return CalendarScreen();
-    else if(_selectedIndex == 2) return AllEventsList();
+    else if(_selectedIndex == 2) return MapSample();
     else return Text(
       'Index 2: Website',
       style: optionStyle,
@@ -56,7 +66,7 @@ class _HomeState extends State<Home>{
               Text("Events", style: titleTextStyle),
               TextButton(
                   onPressed: () {
-                    return Navigator.of(context).push(MaterialPageRoute(builder: (context) => AllEventsList()));
+                    Navigator.of(context).push(MaterialPageRoute(builder: (context) => AllEventsList()));
                   },
                   child: Text("Show more >"))
             ],
@@ -86,7 +96,7 @@ class _HomeState extends State<Home>{
                   return
                     InkWell(
                       onTap: () {
-                        return Navigator.of(context).push(MaterialPageRoute(builder: (context) => UserProfileScreen()));
+                        Navigator.of(context).push(MaterialPageRoute(builder: (context) => UserProfileScreen(user: context.read<UserData>())));
                       },
                       child: Container(
                         margin: const EdgeInsets.only(right: 20),
@@ -111,6 +121,7 @@ class _HomeState extends State<Home>{
 
   @override
   Widget build(BuildContext context) {
+    final User? user = auth.currentUser;
     return Scaffold(
       body: Center(
         child: _selectScreen(context),
@@ -135,23 +146,26 @@ class _HomeState extends State<Home>{
           ),
         ],
         currentIndex: _selectedIndex,
-        unselectedItemColor: Color(0xFF755540),
-        selectedItemColor: Color(0xFF755540),
+        unselectedItemColor: themeDarkColor,
+        selectedItemColor: themeDarkColor,
         onTap: _onItemTapped,
       ),
       appBar: BaseAppBar(
-        title: Text('title'),
+        title: Text("Streetwear Events"),
         appBar: AppBar(),
-        widgets: <Widget>[Icon(Icons.more_vert)],
+        widgets: <Widget>[Icon(Icons.more_vert)]
       ),
       endDrawer: AppDrawer(),
       floatingActionButton: new Visibility(
         visible: _isLogged,
         child: FloatingActionButton(
           onPressed: () {
-            return Navigator.of(context).push(MaterialPageRoute(builder: (context) => AddNewEventsScreen()));
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => AddNewEventsScreen()),
+            );
           },
-          backgroundColor: Color(0xFF755540),
+          backgroundColor: themeDarkColor,
           child: const Icon(Icons.add),
         ),
       )
