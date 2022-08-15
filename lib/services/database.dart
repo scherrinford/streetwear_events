@@ -33,8 +33,18 @@ class DatabaseService{
         });
     }
 
-    Stream<List<Event>> getProducts(){
-        return eventsCollection.snapshots().map((snapshot) => snapshot.docs.map((document) => Event.fromFirestore(document.data() as Map<String,dynamic>)).toList());
+    Stream<List<Event>> get events {
+        return eventsCollection.snapshots().map(_eventsListFromSnapshot);
+    }
+
+    List<Event> _eventsListFromSnapshot(QuerySnapshot snapshot){
+        return snapshot.docs.map((doc){
+            return Event.fromSnapchot(doc);
+        }).toList();
+    }
+
+    Stream<List<Event>> getProducts() {
+        return eventsCollection.snapshots().map((snapshot) => snapshot.docs.map((document) => Event.fromSnapchot(document)).toList());
     }
 
     List<UserData> _userListFromSnapshot(QuerySnapshot snapshot){
@@ -61,7 +71,7 @@ class DatabaseService{
 
     Stream<Event> getProductById(String id){
         final Query myproduct = eventsCollection.where("productId",isEqualTo: id);
-        return myproduct.snapshots().map((snapshot) => snapshot.docs.map((document) => Event.fromFirestore(document.data() as Map<String,dynamic>)).toList().elementAt(0)) ;
+        return myproduct.snapshots().map((snapshot) => snapshot.docs.map((document) => Event.fromSnapchot(document)).toList().elementAt(0)) ;
     }
 
     Stream<UserData> getUserById(String? id){
@@ -71,7 +81,14 @@ class DatabaseService{
 
     Stream<Event> getSavedEventsList(String id){
         final Query myproduct = eventsCollection.where("productId",isEqualTo: id);
-        return myproduct.snapshots().map((snapshot) => snapshot.docs.map((document) => Event.fromFirestore(document.data() as Map<String,dynamic>)).toList().elementAt(0)) ;
+        return myproduct.snapshots().map((snapshot) => snapshot.docs.map((document) => Event.fromSnapchot(document)).toList().elementAt(0)) ;
+
+        // final nameList= FirebaseFirestore.instance
+        //     .collection('users')
+        //     .doc(userId)
+        //     .collection('namesList')
+        //     .where('name', isNotEqualTo: '')
+        //     .snapshots();
     }
 
 

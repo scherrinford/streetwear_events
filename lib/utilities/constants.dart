@@ -42,3 +42,4 @@ final themeLightColor = Color(0xFFF2EFE5);
 final mainThemeColor = Color(0xFF755540);
 
 final backgroundImage = AssetImage('assets/images/round-2-nyc-grand-opening-9.jpg');
+final logoImage = AssetImage('assets/images/streetwear_events.png');

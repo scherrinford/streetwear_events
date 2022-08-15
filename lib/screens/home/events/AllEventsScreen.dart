@@ -105,8 +105,8 @@ class _AllEventsListState extends State<StatefulWidget>{
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
-                          _dropDownListDate(context),
-                          _dropDownListLocation(context),///TODO create _dropDownListDate
+                          // _dropDownListDate(context),
+                          // _dropDownListLocation(context),///TODO create _dropDownListDate
                         ],
                       ),
                     ),

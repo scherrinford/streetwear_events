@@ -99,7 +99,7 @@ class _SignUpScreenState extends State<SignUpScreen>{
                     print(email);
                     print(password);
                     setState(()=> loading = true);
-                   dynamic result = await FirebaseAuth.instance.createUserWithEmailAndPassword(email: email, password: password);//_auth.registerWithEmailAndPassword(email, password, name, phone);
+                   dynamic result = await _auth.registerWithEmailAndPassword(email, password, name, phone);
                     if(result == null)
                     {
                       setState((){

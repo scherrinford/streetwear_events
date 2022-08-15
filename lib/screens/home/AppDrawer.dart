@@ -22,31 +22,32 @@ class AppDrawer extends StatefulWidget {
 }
 
 class _AppDrawerState extends State<AppDrawer> {
+  DatabaseService _databaseService =
+      DatabaseService(uid: FirebaseAuth.instance.currentUser!.uid);
+  late UserData user;
 
-  DatabaseService _databaseService = DatabaseService(uid: FirebaseAuth.instance.currentUser!.uid);
-  UserData? user;
-
-  Widget _logIn(){
+  Widget _logIn() {
     return ListTile(
       leading: Icon(Icons.login),
       title: Text('LogIn'),
       onTap: () {
-        Navigator.of(context).push(MaterialPageRoute(builder: (context) => AuthenticateWrapper()));
+        Navigator.of(context).push(
+            MaterialPageRoute(builder: (context) => AuthenticateWrapper()));
       },
     );
   }
 
-  Widget _logOut(AuthService auth){
+  Widget _logOut(AuthService auth) {
     return ListTile(
       leading: Icon(Icons.login),
       title: Text('Log out'),
-      onTap: () async{
+      onTap: () async {
         await auth.signOut();
       },
     );
   }
 
-  Widget _profile(){
+  Widget _profile() {
     return ListTile(
       leading: Icon(Icons.account_circle),
       title: Text('Profile'),
@@ -57,14 +58,18 @@ class _AppDrawerState extends State<AppDrawer> {
         //   toFirestore: (movie, _) => movie.toMap(),
         // );
         // print(currentUserId.uid);
-        UserData currentUser = _databaseService.getUserById(user?.uid) as UserData;//moviesRef.doc(currentUserId.uid).get().then((snapshot) => snapshot.data() );
+        UserData currentUser = _databaseService.getUserById(user?.uid)
+            as UserData; //moviesRef.doc(currentUserId.uid).get().then((snapshot) => snapshot.data() );
         print(currentUser.name);
-        Navigator.of(context).push(MaterialPageRoute(builder: (context) => UserProfileScreen(user: currentUser,))); //
+        Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => UserProfileScreen(
+                  user: currentUser,
+                ))); //
       },
     );
   }
 
-  Widget _settings(){
+  Widget _settings() {
     return ListTile(
       leading: Icon(Icons.settings),
       title: Text('Settings'),
@@ -74,17 +79,18 @@ class _AppDrawerState extends State<AppDrawer> {
     );
   }
 
-  Widget _addNewEvent(){
+  Widget _addNewEvent() {
     return ListTile(
       leading: Icon(Icons.add),
       title: Text('Add New Event'),
       onTap: () {
-        Navigator.of(context).push(MaterialPageRoute(builder: (context) => AddNewEventsScreen()));
+        Navigator.of(context).push(
+            MaterialPageRoute(builder: (context) => AddNewEventsScreen()));
       },
     );
   }
 
-  Widget _addOnlineStore(){
+  Widget _addOnlineStore() {
     return ListTile(
       leading: Icon(Icons.add),
       title: Text('Add Online Store'),
@@ -94,7 +100,7 @@ class _AppDrawerState extends State<AppDrawer> {
     );
   }
 
-  Widget _addStationaryStore(){
+  Widget _addStationaryStore() {
     return ListTile(
       leading: Icon(Icons.add),
       title: Text('Add Stationary Store'),
@@ -111,12 +117,12 @@ class _AppDrawerState extends State<AppDrawer> {
     //   toFirestore: (movie, _) => movie.toMap(),
     // );
     // print(currentUserId.uid);
-    UserData currentUser = _databaseService.getUserById(user?.uid) as UserData; //await moviesRef.doc(currentUserId.uid).get().then((snapshot) => snapshot.data());
+    UserData currentUser = _databaseService.getUserById(user?.uid)
+        as UserData; //await moviesRef.doc(currentUserId.uid).get().then((snapshot) => snapshot.data());
     print(currentUser.name);
   }
 
-  Widget _loggedUser(BuildContext context, AuthService _auth){
-
+  Widget _loggedUser(BuildContext context, AuthService _auth) {
     return Drawer(
       child: ListView(
         padding: EdgeInsets.zero,
@@ -126,7 +132,7 @@ class _AppDrawerState extends State<AppDrawer> {
               color: themeDarkColor,
             ),
             child: Text(
-              'aaaa',
+              "user.name",
               style: TextStyle(
                 color: themeLightColor,
                 fontSize: 24,
@@ -144,8 +150,7 @@ class _AppDrawerState extends State<AppDrawer> {
     );
   }
 
-  Widget _unloggedUser(BuildContext context){
-
+  Widget _unloggedUser(BuildContext context) {
     return Drawer(
       child: ListView(
         padding: EdgeInsets.zero,
@@ -172,19 +177,17 @@ class _AppDrawerState extends State<AppDrawer> {
   Widget build(BuildContext context) {
     // https://firebase.flutter.dev/docs/auth/usage/
     user = Provider.of<UserData>(context);
+    print(user.name);
     final AuthService _auth = AuthService();
 
     // final FirebaseAuth auth = FirebaseAuth.instance;
     // final User? user = auth.currentUser;
 
-
-
     // print(_auth.us.name);
-    if(user == null){
+    if (user == null) {
       return _unloggedUser(context);
-    }else {
+    } else {
       return _loggedUser(context, _auth);
     }
   }
-
 }
