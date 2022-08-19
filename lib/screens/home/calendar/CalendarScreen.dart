@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:streetwear_events/screens/home/CalendarWidget.dart';
+import 'package:streetwear_events/screens/home/calendar/CalendarWidget.dart';
 import 'package:streetwear_events/screens/home/events/EventList.dart';
 import 'package:streetwear_events/utilities/constants.dart';
 
@@ -31,13 +31,10 @@ class _CalendarScreenState extends State<StatefulWidget>{
   Widget build(BuildContext context) {
     return Container(
       child: DefaultTabController(
-        initialIndex: 1,
+        initialIndex: 0,
         length: 2,
         child: Scaffold(
-          appBar: AppBar(
-            backgroundColor: Colors.white,
-            title: Text("Events", style: titleTextStyle),
-            bottom: TabBar(
+          appBar:  TabBar(
               onTap: _switchTabLabel,
               indicatorColor: Color(0xff342013),
               labelColor: Colors.black87,
@@ -52,7 +49,6 @@ class _CalendarScreenState extends State<StatefulWidget>{
                   //icon: Icon(Icons.calendar_view_day),
                 ),
               ],
-            ),
           ),
           body: TabBarView(
             children: <Widget>[
@@ -74,4 +70,5 @@ class _CalendarScreenState extends State<StatefulWidget>{
       ),
     );
   }
+
 }

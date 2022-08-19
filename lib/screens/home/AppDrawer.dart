@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:streetwear_events/models/user_data.dart';
 
 import 'package:streetwear_events/screens/authenticate/authenticate_wrapper.dart';
-import 'package:streetwear_events/screens/home/UserProfileScreen.dart';
+import 'package:streetwear_events/screens/home/user_profile/UserProfileScreen.dart';
 import 'package:streetwear_events/screens/home/events/AddNewEventsScreen.dart';
 import 'package:streetwear_events/services/auth.dart';
 
@@ -58,13 +58,13 @@ class _AppDrawerState extends State<AppDrawer> {
         //   toFirestore: (movie, _) => movie.toMap(),
         // );
         // print(currentUserId.uid);
-        UserData currentUser = _databaseService.getUserById(user?.uid)
-            as UserData; //moviesRef.doc(currentUserId.uid).get().then((snapshot) => snapshot.data() );
-        print(currentUser.name);
-        Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => UserProfileScreen(
-                  user: currentUser,
-                ))); //
+        // UserData currentUser = _databaseService.getUserById(user?.uid)
+        //     as UserData; //moviesRef.doc(currentUserId.uid).get().then((snapshot) => snapshot.data() );
+        // print(currentUser.name);
+        // Navigator.of(context).push(MaterialPageRoute(
+        //     builder: (context) => UserProfileScreen(
+        //           user: currentUser,
+        //         ))); //
       },
     );
   }
@@ -117,9 +117,9 @@ class _AppDrawerState extends State<AppDrawer> {
     //   toFirestore: (movie, _) => movie.toMap(),
     // );
     // print(currentUserId.uid);
-    UserData currentUser = _databaseService.getUserById(user?.uid)
-        as UserData; //await moviesRef.doc(currentUserId.uid).get().then((snapshot) => snapshot.data());
-    print(currentUser.name);
+    // UserData currentUser = _databaseService.getUserById(user?.uid)
+    //     as UserData; //await moviesRef.doc(currentUserId.uid).get().then((snapshot) => snapshot.data());
+    // print(currentUser.name);
   }
 
   Widget _loggedUser(BuildContext context, AuthService _auth) {

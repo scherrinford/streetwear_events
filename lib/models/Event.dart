@@ -1,22 +1,22 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Event{
-  final String uid;
+  final String id;
   final String name;
   final String description;
   final String location;
-  final String eventId;
+  final String uid;
   final DateTime date;
   //final String city;
   //final String photoUrl;
 
 
   Event({
-    required this.uid,
+    this.id = '',
     required this.name,
     required this.description,
     required this.location,
-    required this.eventId,
+    required this.uid,
     required this.date,
   });
 
@@ -30,19 +30,39 @@ class Event{
     };
   }
 
+  static Event fromJson(Map<String,dynamic> data) => Event(
+      name: data['name'],
+      description: data['description'],
+      location: data['location'],
+      uid: data['uid'],
+      date: (data['date'] as Timestamp).toDate(),
+  );
+
+  factory Event.fromFirestore( DocumentSnapshot<Map<String, dynamic>> snapshot, SnapshotOptions? options, ){
+    final data = snapshot.data();
+    return Event(
+        uid: data!['uid'],
+        name: data['name'],
+        description: data['description'],
+        location: data['location'],
+        id: data['id'],
+        date: data['date']
+    );
+  }
+
   Event.fromSnapchot(DocumentSnapshot snapshot)
-      : eventId = snapshot['eventId'],
+      : id = snapshot['id'],
         name = snapshot['name'],
         date = (snapshot['date'] as Timestamp).toDate(),
         location = snapshot['location'],
         description = snapshot['description'],
         uid = snapshot['uid'];
 
-  Event.fromFirestore(Map<String, dynamic> firestore)
-      : eventId = firestore['eventId'],
-        name = firestore['name'],
-        date = (firestore['date'] as Timestamp).toDate(),
-        location = firestore['location'],
-        description = firestore['description'],
-        uid = firestore['uid'];
+  // Event.fromFirestore(Map<String, dynamic> firestore)
+  //     : eventId = firestore['eventId'],
+  //       name = firestore['name'],
+  //       date = (firestore['date'] as Timestamp).toDate(),
+  //       location = firestore['location'],
+  //       description = firestore['description'],
+  //       uid = firestore['uid'];
 }

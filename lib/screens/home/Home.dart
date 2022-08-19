@@ -7,12 +7,12 @@ import 'package:streetwear_events/screens/home/events/AllEventsScreen.dart';
 import 'package:streetwear_events/screens/home/AppDrawer.dart';
 import 'package:streetwear_events/screens/home/events/EventList.dart';
 import 'package:streetwear_events/screens/home/events/EventTile.dart';
-import 'package:streetwear_events/screens/home/GoogleMapScreen.dart';
-import 'package:streetwear_events/screens/home/UserProfileScreen.dart';
+import 'package:streetwear_events/screens/home/map/GoogleMapScreen.dart';
+import 'package:streetwear_events/screens/home/user_profile/UserProfileScreen.dart';
 import 'package:streetwear_events/utilities/constants.dart';
 
 import 'AppBar.dart';
-import 'CalendarScreen.dart';
+import 'calendar/CalendarScreen.dart';
 import 'events/AddNewEventsScreen.dart';
 
 //GoogleMaps https://codelabs.developers.google.com/codelabs/google-maps-in-flutter#3

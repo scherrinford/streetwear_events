@@ -20,7 +20,7 @@ class DatabaseService{
     //final CollectionReference Collection = FirebaseFirestore.instance.collection('users');
 
     Future<void> saveProduct(Event event){
-        return eventsCollection.doc(event.eventId).set(event.toMap());
+        return eventsCollection.doc(event.id).set(event.toMap());
     }
 
     Future saveEvent(String name, String description, String location, DateTime date) async{
@@ -34,12 +34,13 @@ class DatabaseService{
     }
 
     Stream<List<Event>> get events {
-        return eventsCollection.snapshots().map(_eventsListFromSnapshot);
+        return FirebaseFirestore.instance.collection('events').snapshots().map((snapshot) => snapshot.docs.map((doc) => Event.fromJson(doc.data())).toList());
+        // return eventsCollection.snapshots().map(_eventsListFromSnapshot);
     }
 
     List<Event> _eventsListFromSnapshot(QuerySnapshot snapshot){
         return snapshot.docs.map((doc){
-            return Event.fromSnapchot(doc);
+            return Event.fromJson(doc.data()as Map<String, dynamic>);
         }).toList();
     }
 
@@ -63,6 +64,7 @@ class DatabaseService{
 
     Future updateUserData(String name, String phone, String email) async{
         return await usersCollection.doc(uid).set({
+            'uid' : uid,
             'name' : name,
             'phone' : phone,
             'email' : email,
@@ -76,7 +78,7 @@ class DatabaseService{
 
     Stream<UserData> getUserById(String? id){
         final Query user = usersCollection.where("uId",isEqualTo: id);
-        return user.snapshots().map((snapshot) => snapshot.docs.map((document) => UserData.fromFirestore(document.data() as Map<String,dynamic>, savedEventsList!)).toList().elementAt(0)) ;
+        return user.snapshots().map((snapshot) => snapshot.docs.map((document) => UserData.fromSnapchot(document, savedEventsList!)).toList().elementAt(0)) ;
     }
 
     Stream<Event> getSavedEventsList(String id){
@@ -91,6 +93,9 @@ class DatabaseService{
         //     .snapshots();
     }
 
-
+    Stream<List<Event>> getListOfEventsByDateRange(DateTime startDate, DateTime endDate){
+        final Query dateRangeQuery = FirebaseFirestore.instance.collection('events').where("date", isGreaterThanOrEqualTo: startDate, isLessThanOrEqualTo: endDate);
+        return FirebaseFirestore.instance.collection('events').where("date", isGreaterThanOrEqualTo: startDate, isLessThanOrEqualTo: endDate).snapshots().map((snapshot) => snapshot.docs.map((doc) => Event.fromJson(doc.data())).toList());
+    }
 
 }

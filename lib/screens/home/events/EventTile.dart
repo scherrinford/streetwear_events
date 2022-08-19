@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:streetwear_events/models/user_data.dart';
 import 'package:streetwear_events/models/Event.dart';
 import 'package:streetwear_events/services/database.dart';
-import 'package:streetwear_events/screens/home/DetailScreen.dart';
+import 'package:streetwear_events/screens/home/events/DetailScreen.dart';
 import 'package:streetwear_events/utilities/constants.dart';
 
 class EventTile extends StatefulWidget {
@@ -95,8 +95,8 @@ class _EventTileState extends State<EventTile> {
             //   fromFirestore: (snapshot, _) => UserData.fromFirestore(snapshot.data() as Map<String,dynamic>),
             //   toFirestore: (movie, _) => movie.toMap(),
             // );
-            UserData userdata = _databaseService.getUserById(widget.event.uid) as UserData;// moviesRef.doc(widget.event.uid).get().then((snapshot) => snapshot.data() as Map<String,dynamic>);
-            Navigator.of(context).push(MaterialPageRoute(builder: (context) => DetailScreen(event: widget.event, user: userdata)));
+            //UserData userdata = _databaseService.getUserById(widget.event.uid) as UserData;// moviesRef.doc(widget.event.uid).get().then((snapshot) => snapshot.data() as Map<String,dynamic>);
+            Navigator.of(context).push(MaterialPageRoute(builder: (context) => DetailScreen(event: widget.event)));
           },
           child: Container(
             width: 340,

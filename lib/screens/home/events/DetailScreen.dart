@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -9,14 +10,13 @@ import 'package:streetwear_events/models/Event.dart';
 import 'package:streetwear_events/services/database.dart';
 import 'package:streetwear_events/utilities/constants.dart';
 
-import 'AppBar.dart';
-import 'Home.dart';
+import '../AppBar.dart';
+import '../Home.dart';
 
 class DetailScreen extends StatefulWidget{
 
   final Event event;
-  final UserData user;
-  DetailScreen({required this.event, required this.user});
+  DetailScreen({required this.event});
   @override
   _DetailScreenState createState() => _DetailScreenState();
 }
@@ -25,8 +25,17 @@ class DetailScreen extends StatefulWidget{
 
 class _DetailScreenState extends State<DetailScreen> {
 
+  late UserData user;
+
+  Stream<Event> getProductById(String id){
+    final Query myproduct = FirebaseFirestore.instance.collection('events').where("productId",isEqualTo: id);
+    return myproduct.snapshots().map((snapshot) => snapshot.docs.map((document) => Event.fromSnapchot(document)).toList().elementAt(0)) ;
+  }
+
+
   @override
   Widget build(BuildContext context) {
+    // user = getProductById(widget.event.uid) as UserData;
 
     return Dismissible(
         direction: DismissDirection.down,
@@ -113,7 +122,7 @@ class _DetailScreenState extends State<DetailScreen> {
                                 ),
                               ),
                             ),
-                            Text(widget.user.name as String, style: smallTitleTextStyle)
+                            Text("user.name as String", style: smallTitleTextStyle)
                           ],
                         ),
                         SizedBox(height: 20),

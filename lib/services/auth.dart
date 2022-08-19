@@ -16,11 +16,11 @@ class AuthService {
   }
 
   //auth change user stream
-  Stream<UserData>? get user {
+  Stream<UserData?> get user {
     // UserData? userData = _userFromFireBaseUser;
     // return _auth.authStateChanges().map(_userFromFireBaseUser);
     return _auth.authStateChanges().map((firebaseUser) {
-      final user = firebaseUser == null ? UserData() : us=UserData();
+      final user = firebaseUser == null ? null : us=UserData(uid: firebaseUser.uid);
       return user;
     });
   }

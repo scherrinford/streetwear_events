@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:streetwear_events/screens/home/events/EventList.dart';
 import 'package:streetwear_events/utilities/constants.dart';
 
-import '../CalendarScreen.dart';
+import '../calendar/CalendarScreen.dart';
 
 class AllEventsList extends StatefulWidget{
   @override

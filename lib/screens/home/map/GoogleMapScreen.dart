@@ -23,6 +23,7 @@ class MapSample extends StatefulWidget {
 
 class MapSampleState extends State<MapSample> {
 
+
   late GoogleMapController mapController;
   Location _location = Location();
   LatLng _initialCameraPosition = const LatLng(52.237049, 21.017532);

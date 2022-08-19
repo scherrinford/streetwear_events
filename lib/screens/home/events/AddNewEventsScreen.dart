@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:streetwear_events/models/user_data.dart';
-import 'package:streetwear_events/screens/home/DetailScreen.dart';
+import 'package:streetwear_events/screens/home/events/DetailScreen.dart';
 import 'package:streetwear_events/screens/home/Home.dart';
 import 'package:streetwear_events/services/auth.dart';
 import 'package:streetwear_events/services/database.dart';

@@ -20,34 +20,12 @@ Future<void> main() async {
 class MyApp extends StatelessWidget {
   final Future<FirebaseApp> _firebaseApp = Firebase.initializeApp();
 
-  final AuthService _authService = AuthService();
-  final DatabaseService _databaseService = DatabaseService(uid: null);
-
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-        providers: [
-          //StreamProvider(create: (context) => AuthService().user, initialData: null,),
-          Provider.value(value: _authService),
-          Provider.value(value: _databaseService),
-          StreamProvider<UserData?>.value(
-              value: _authService.user,
-              initialData: null
-          ),
-          StreamProvider<List<Event>>.value(
-              value: _databaseService.events,
-              initialData: [],
-          ),
-          StreamProvider<List<UserData>>.value(
-              value: _databaseService.getUsersList(),
-              initialData: []
-          ),
-          // Provider<Event>(
-          // lazy: false,
-          // create: (_) => User(),
-          // ),
-        ],
+    return StreamProvider<UserData?>.value(
+        value: AuthService().user,
+        initialData: null,
         child: MaterialApp(
           title: 'Flutter Demo',
           home: Wrapper(),

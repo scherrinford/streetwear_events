@@ -6,7 +6,7 @@ import 'package:streetwear_events/services/database.dart';
 
 class UserData{
 
-  final String? uid;
+  final String uid;
   final String? name;
   final String? email;
   final String? phone;
@@ -16,7 +16,7 @@ class UserData{
   List<Event>? savedEventsList;
 
   UserData({
-    this.uid,
+    required this.uid,
     this.name,
     this.email,
     this.phone,
@@ -25,9 +25,9 @@ class UserData{
     this.description,
   });
 
-  String? getUserId(){
-    return uid;
-  }
+  // String getUserId(){
+  //   return uid;
+  // }
 
   Map<String,dynamic> toMap(){
     return {
