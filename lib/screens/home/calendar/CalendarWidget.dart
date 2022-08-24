@@ -11,36 +11,6 @@ import 'package:streetwear_events/utilities/constants.dart';
 
 import '../events/DetailScreen.dart';
 
-
-
-// import 'package:cloud_firestore/cloud_firestore.dart';
-// import 'package:firebase_auth/firebase_auth.dart';
-// import 'package:flutter/cupertino.dart';
-// import 'package:flutter/material.dart';
-// import 'package:flutter_calendar_carousel/flutter_calendar_carousel.dart';
-// import 'package:flutter_calendar_carousel/flutter_calendar_carousel.dart'
-//     show CalendarCarousel, EventList;
-// import 'package:flutter_calendar_carousel/classes/Event.dart' as Carousel;
-// import 'package:flutter_calendar_carousel/classes/event_list.dart';
-//
-// import 'package:streetwear_events/services/database.dart';
-// import 'package:streetwear_events/models/Event.dart' as EventFirebase;
-//
-//
-//
-// class CalendarWidget extends StatefulWidget {
-//   @override
-//   _CalendarWidgetState createState() => _CalendarWidgetState();
-// }
-//
-// class _CalendarWidgetState extends State<StatefulWidget> {
-//   DateTime _currentDate = new DateTime.now();
-//   DateTime _startDate = new DateTime(DateTime.now().year, DateTime.now().month, 1);
-//   DateTime _endDate = new DateTime(DateTime.now().year, DateTime.now().month + 1, 0);
-//
-//   DatabaseService databaseService = new DatabaseService(uid: FirebaseAuth.instance.currentUser?.uid);
-
-
 class CalendarWidget extends StatefulWidget {
   @override
   _CalendarWidgetState createState() => _CalendarWidgetState();
@@ -119,7 +89,6 @@ class _CalendarWidgetState extends State<StatefulWidget> {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Column(
         children: <Widget>[
           Container(
@@ -176,7 +145,7 @@ class _CalendarWidgetState extends State<StatefulWidget> {
             ),
           ),
           Container(
-              height: MediaQuery.of(context).size.height / 4,
+              height: MediaQuery.of(context).size.height / 5,
               child: StreamBuilder<List<EventFirebase.Event>>(stream: getListOfEventsByDateRange(_startDate, _endDate), builder: (context, snapshot) {
                   if (snapshot.hasError){
                     return Text("No events here");

@@ -3,6 +3,9 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
+import 'package:streetwear_events/models/place_location.dart';
+
+import 'location_detail_screen.dart';
 
 void main() => runApp(MyApp());
 
@@ -23,10 +26,16 @@ class MapSample extends StatefulWidget {
 
 class MapSampleState extends State<MapSample> {
 
-
   late GoogleMapController mapController;
   Location _location = Location();
-  LatLng _initialCameraPosition = const LatLng(52.237049, 21.017532);
+  late CameraPosition _initialCameraPosition;
+
+  @override
+  void initState(){
+    super.initState();
+      _initialCameraPosition = CameraPosition(target: LatLng(51.759029, 19.457432), zoom: 7);
+
+  }
 
   Future<LocationData?> _currentLocation() async {
     bool serviceEnabled;
@@ -54,22 +63,90 @@ class MapSampleState extends State<MapSample> {
 
   void _onMapCreated(GoogleMapController controller) {
     mapController = controller;
-    // _location.onLocationChanged.listen((l) {
-    //   mapController.animateCamera(
-    //     CameraUpdate.newCameraPosition(
-    //       CameraPosition(target: LatLng(l.latitude, l.longitude),zoom: 15),
-    //     ),
-    //   );
-    // });
+    _location.onLocationChanged.listen((l) {
+      _initialCameraPosition = CameraPosition(target: LatLng(l.latitude!, l.longitude!),zoom: 12);
+      mapController.animateCamera(
+        CameraUpdate.newCameraPosition(
+          CameraPosition(target: LatLng(l.latitude!, l.longitude!),zoom: 12),
+        ),
+      );
+    });
+  }
+
+  List<Marker> allMarkers = [];
+
+  Widget _loadMap(){
+    return StreamBuilder<List<PlaceLocation>>(
+      stream: PlaceLocation.getListOfLocations(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) return Text("Loading maps... Please wait");
+        for (int i=0; i < snapshot.data!.length; i++){
+            final marker = snapshot.data![i];
+            allMarkers.add(new Marker(
+              markerId: marker.markerId,
+              position: new LatLng(marker.position.latitude, marker.position.longitude),
+              infoWindow: InfoWindow(
+                title: marker.name,
+                snippet: marker.address + ", " + marker.city,
+              ),
+              onTap: () {
+                Navigator.of(context).push(MaterialPageRoute(builder: (context) => LocationDetailScreen(placeLocation: marker)));
+              }
+            ));
+        }
+        return GoogleMap(
+            initialCameraPosition: _initialCameraPosition,
+            mapType: MapType.normal,
+            onMapCreated: _onMapCreated,
+            myLocationEnabled: true,
+            markers:  allMarkers.toSet(),
+        );
+      }
+
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    return GoogleMap(
-              initialCameraPosition: CameraPosition(target: _initialCameraPosition),
-              mapType: MapType.normal,
-              onMapCreated: _onMapCreated,
-              myLocationEnabled: true,
-    );
+
+    return _loadMap();
+    //   GoogleMap(
+    //   initialCameraPosition: _initialCameraPosition,
+    //   mapType: MapType.normal,
+    //   onMapCreated: _onMapCreated,
+    //   myLocationEnabled: true,
+    //   markers: {
+    //
+    //     Marker(
+    //       markerId: MarkerId("Vintage Point"),
+    //       position: const LatLng(51.761291, 19.458075),
+    //       infoWindow: InfoWindow(title: "Vintage Point", snippet: 'click for details'),
+    //       onTap: () {
+    //
+    //       }
+    //     ),
+    //   }
+    // );
   }
 }
+
+
+// SizedBox(
+// height: 60,
+// child: Card(
+// child: new ListTile(
+// leading: new Icon(Icons.search),
+// title: new TextField(
+// //controller: textController,
+// decoration: new InputDecoration(
+// hintText: 'Search', border: InputBorder.none),
+// //onChanged: onSearchTextChanged,
+// ),
+// trailing: new IconButton(icon: new Icon(Icons.cancel), onPressed: () {
+// ///TODO add logic to search field
+// //textController.clear();
+// //onSearchTextChanged('');
+// },),
+// ),
+// ),
+// ),
