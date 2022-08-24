@@ -54,6 +54,7 @@ class _DetailScreenState extends State<DetailScreen> {
       //   ),
         //endDrawer: AppDrawer(),
           body: new Container(
+            height: MediaQuery.of(context).size.height,
             //height: 238,
             //constraints: BoxConstraints.tightFor(height: 221.0),
             decoration: BoxDecoration(

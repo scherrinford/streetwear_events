@@ -52,6 +52,7 @@ class _LocationDetailScreenState extends State<LocationDetailScreen> {
         //   ),
         //endDrawer: AppDrawer(),
         body: new Container(
+          height: MediaQuery.of(context).size.height,
           //height: 238,
           //constraints: BoxConstraints.tightFor(height: 221.0),
           decoration: BoxDecoration(
@@ -92,27 +93,7 @@ class _LocationDetailScreenState extends State<LocationDetailScreen> {
                       children: [
                         Icon(Icons.location_on, color: Colors.black54),
                         SizedBox(width: 5),
-                        Text(widget.placeLocation.city + ", Warszawa", style: TextStyle(color: Colors.black54)),
-                      ],
-                    ),
-                    SizedBox(height: 20),
-                    Text("Organizer", style: smallTitleTextStyle),
-                    SizedBox(height: 20),
-                    Row(
-                      children: [
-                        Container(
-                          margin: const EdgeInsets.only(right: 20),
-                          width: 50,
-                          height: 50,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(50),
-                            image: new DecorationImage(
-                              image: NetworkImage('https://hypebeast.com/image/2017/10/round-2-nyc-grand-opening-9.jpg'),
-                              fit: BoxFit.cover, //BoxFit.fitWidth,
-                            ),
-                          ),
-                        ),
-                        Text("user.name as String", style: smallTitleTextStyle)
+                        Text(widget.placeLocation.address + ", " + widget.placeLocation.city, style: TextStyle(color: Colors.black54)),
                       ],
                     ),
                     SizedBox(height: 20),
@@ -126,34 +107,6 @@ class _LocationDetailScreenState extends State<LocationDetailScreen> {
                         softWrap: true,
                       ),
                     ),
-                    // Positioned(
-                    //   bottom: 20,
-                    //   child: Row(
-                    //     children: [
-                    //
-                    //
-                    //     ],
-                    //   ),
-                    // ),
-                    // ListTile(
-                    //   title: Text('The Enchanted Nightingale'),
-                    //   subtitle: Text('Music by Julie Gable. Lyrics by Sidney Stein.'),
-                    // ),
-                    // Row(
-                    //   mainAxisAlignment: MainAxisAlignment.end,
-                    //   children: <Widget>[
-                    //     TextButton(
-                    //       child: const Text('BUY TICKETS'),
-                    //       onPressed: () { /* ... */ },
-                    //     ),
-                    //     const SizedBox(width: 8),
-                    //     TextButton(
-                    //       child: const Text('LISTEN'),
-                    //       onPressed: () { /* ... */ },
-                    //     ),
-                    //     const SizedBox(width: 8),
-                    //   ],
-                    // ),
 
                   ],
                 ),

@@ -33,7 +33,7 @@ class MapSampleState extends State<MapSample> {
   @override
   void initState(){
     super.initState();
-    _initialCameraPosition = CameraPosition(target: LatLng(52.237049, 21.017532), zoom: 17);
+      _initialCameraPosition = CameraPosition(target: LatLng(51.759029, 19.457432), zoom: 7);
 
   }
 
@@ -64,12 +64,12 @@ class MapSampleState extends State<MapSample> {
   void _onMapCreated(GoogleMapController controller) {
     mapController = controller;
     _location.onLocationChanged.listen((l) {
-      _initialCameraPosition = CameraPosition(target: LatLng(l.latitude!, l.longitude!),zoom: 17);
-      // mapController.animateCamera(
-      //   CameraUpdate.newCameraPosition(
-      //     CameraPosition(target: LatLng(l.latitude!, l.longitude!),zoom: 15),
-      //   ),
-      // );
+      _initialCameraPosition = CameraPosition(target: LatLng(l.latitude!, l.longitude!),zoom: 12);
+      mapController.animateCamera(
+        CameraUpdate.newCameraPosition(
+          CameraPosition(target: LatLng(l.latitude!, l.longitude!),zoom: 12),
+        ),
+      );
     });
   }
 
@@ -87,7 +87,7 @@ class MapSampleState extends State<MapSample> {
               position: new LatLng(marker.position.latitude, marker.position.longitude),
               infoWindow: InfoWindow(
                 title: marker.name,
-                snippet: marker.address,
+                snippet: marker.address + ", " + marker.city,
               ),
               onTap: () {
                 Navigator.of(context).push(MaterialPageRoute(builder: (context) => LocationDetailScreen(placeLocation: marker)));
