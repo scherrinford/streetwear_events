@@ -8,6 +8,9 @@ import 'package:streetwear_events/screens/home/Home.dart';
 import 'package:streetwear_events/services/auth.dart';
 import 'package:streetwear_events/services/database.dart';
 import 'package:streetwear_events/utilities/constants.dart';
+import 'package:google_maps_webservice/places.dart';
+import 'package:google_api_headers/google_api_headers.dart';
+import 'package:google_place/google_place.dart';
 
 class AddNewEventsScreen extends StatefulWidget{
   @override
@@ -33,12 +36,27 @@ class _AddNewEventsScreenState extends State<StatefulWidget>{
 
   final _formKey = GlobalKey<FormState>();
 
+  GooglePlace googlePlace = GooglePlace(kGoogleApiKey);
+  final _searchFieldController = TextEditingController();
+  List<AutocompletePrediction> predictions = [];
+  DetailsResult? placeResult;
+
+  late FocusNode focusNode;
+
 
   @override
   void initState() {
     dateInput.text = "";
     timeInput.text = "";
     super.initState();
+    focusNode = FocusNode();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    focusNode.dispose();
   }
 
   void _selectDate() async {
@@ -72,6 +90,16 @@ class _AddNewEventsScreenState extends State<StatefulWidget>{
       setState(() {
         _time = pickedTime;
         timeInput.text = formattedTime;
+      });
+    }
+  }
+
+  void autoCompleteSearch(String value) async {
+    var result = await googlePlace.autocomplete.get(value);
+    if (result != null && result.predictions != null && mounted) {
+      // print(result.predictions!.first.description);
+      setState(() {
+        predictions = result.predictions!;
       });
     }
   }
@@ -114,26 +142,70 @@ class _AddNewEventsScreenState extends State<StatefulWidget>{
                 ),
                 SizedBox(height: 20),
                 TextFormField(
-                  validator: (val)=> val!.isEmpty? "Enter Place" : null,
-                  onChanged: (val){
-                    setState(()=>_location=val);
+                  controller: _searchFieldController,
+                  focusNode: focusNode,
+                  onChanged: (value) {
+                    if (value.isNotEmpty) {
+                      //places api
+                      autoCompleteSearch(value);
+                    } else {
+                      //clear out the results
+                    }
                   },
                   decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: 'Place',
-                  ),
+                      border: OutlineInputBorder(),
+                      labelText: 'Find address',
+                      suffixIcon: _searchFieldController.text.isNotEmpty
+                          ? IconButton(
+                        onPressed: () {
+                          setState(() {
+                            predictions = [];
+                            _searchFieldController.clear();
+                          });
+                        },
+                        icon: Icon(Icons.clear_outlined),
+                      )
+                          : null),
                 ),
-                SizedBox(height: 20),
-                TextFormField(
-                  validator: (val)=> val!.isEmpty? "Enter City" : null,
-                  onChanged: (val){
-                    setState(()=>_city=val);
-                  },
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: 'City',
-                  ),
-                ),
+                ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: predictions.length,
+                    itemBuilder: (context, index) {
+                      return ListTile(
+                        leading: CircleAvatar(
+                          child: Icon(
+                            Icons.pin_drop,
+                            color: Colors.white,
+                          ),
+                        ),
+                        title: Text(
+                          predictions[index].description.toString(),
+                        ),
+                        onTap: () async {
+                          final placeId = predictions[index].placeId!;
+                          final details = await googlePlace.details.get(placeId);
+                          if (details != null &&
+                              details.result != null &&
+                              mounted) {
+                            if (focusNode.hasFocus) {
+                              setState(() {
+                                placeResult = details.result;
+                                _location = placeResult!.formattedAddress!;
+                                // _name = placeResult!.name!;
+                                // _lang = placeResult!.geometry!.location!.lng!;
+                                // _lat = placeResult!.geometry!.location!.lat!;
+                                // _placeId = placeId;
+                                var localityPath = placeResult!.adrAddress?.split("<span class=\"locality\">");
+                                _city =  localityPath![1].split("</span>")[0].trim();
+                                _searchFieldController.text =
+                                details.result!.name!;
+                                predictions = [];
+                              });
+                            }
+                          }
+                        },
+                      );
+                    }),
                 SizedBox(height: 20),
                 TextFormField(
                   validator: (val)=> val!.isEmpty? "Enter Date" : null,

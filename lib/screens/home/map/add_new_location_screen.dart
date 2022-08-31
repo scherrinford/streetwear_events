@@ -79,20 +79,20 @@ class _AddNewLocationScreenState extends State<StatefulWidget>{
     }
   }
 
-  Future<Null> displayPrediction(Prediction p) async {
-    if (p != null) {
-      GoogleMapsPlaces _places = GoogleMapsPlaces(
-        apiKey: kGoogleApiKey,
-        apiHeaders: await GoogleApiHeaders().getHeaders(),
-      );
-      PlacesDetailsResponse detail = await _places.getDetailsByPlaceId(p.placeId!);
-      final lat = detail.result.geometry!.location.lat;
-      final lng = detail.result.geometry!.location.lng;
-
-      print(lat);
-      print(lng);
-    }
-  }
+  // Future<Null> displayPrediction(Prediction p) async {
+  //   if (p != null) {
+  //     GoogleMapsPlaces _places = GoogleMapsPlaces(
+  //       apiKey: kGoogleApiKey,
+  //       apiHeaders: await GoogleApiHeaders().getHeaders(),
+  //     );
+  //     PlacesDetailsResponse detail = await _places.getDetailsByPlaceId(p.placeId!);
+  //     final lat = detail.result.geometry!.location.lat;
+  //     final lng = detail.result.geometry!.location.lng;
+  //
+  //     print(lat);
+  //     print(lng);
+  //   }
+  // }
 
 
   @override
