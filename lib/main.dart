@@ -9,7 +9,6 @@ import 'package:streetwear_events/screens/home/Home.dart';
 import 'package:provider/provider.dart';
 import 'package:streetwear_events/services/auth.dart';
 import 'package:streetwear_events/services/database.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

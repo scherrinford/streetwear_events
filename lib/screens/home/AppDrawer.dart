@@ -12,6 +12,7 @@ import 'package:streetwear_events/services/auth.dart';
 
 import '../../services/database.dart';
 import '../../utilities/constants.dart';
+import 'map/add_new_location_screen.dart';
 
 class AppDrawer extends StatefulWidget {
   // final UserData user;
@@ -105,7 +106,7 @@ class _AppDrawerState extends State<AppDrawer> {
       leading: Icon(Icons.add),
       title: Text('Add Stationary Store'),
       onTap: () {
-        //return Navigator.of(context).push(MaterialPageRoute(builder: (context) => AddNewEventsScreen()));
+        Navigator.of(context).push(MaterialPageRoute(builder: (context) => AddNewLocationScreen()));
       },
     );
   }

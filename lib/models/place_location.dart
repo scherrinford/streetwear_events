@@ -25,6 +25,17 @@ class PlaceLocation{
     required this.markerId
   });
 
+  Map<String, Object?> toJson() {
+    return {
+      'name' : name,
+      'city' : city,
+      'address' : address,
+      'position' : position,
+      'description' : description,
+      'type' : type,
+    };
+  }
+
   static PlaceLocation fromJson(Map<String,dynamic> data) => PlaceLocation(
     id: data['id'],
     name: data['name'],
@@ -39,6 +50,20 @@ class PlaceLocation{
   static Stream<List<PlaceLocation>> getListOfLocations(){
     return FirebaseFirestore.instance.collection('locations').snapshots().map((snapshot)
     => snapshot.docs.map((doc) => PlaceLocation.fromJson(doc.data())).toList());
+  }
+
+  static Future saveLocation(String name, String description, String address, String type, String city, String markerId, LatLng position) async{
+    DocumentReference docReference = FirebaseFirestore.instance.collection('locations').doc();
+    return await docReference.set({
+      'name' : name,
+      'city' : city,
+      'address' : address,
+      'description' : description,
+      'type': type,
+      'position': GeoPoint(position.latitude, position.longitude),
+      'id': docReference.id,
+      'markerId': markerId
+    });
   }
 
 

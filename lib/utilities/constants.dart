@@ -43,3 +43,5 @@ final mainThemeColor = Color(0xFF755540);
 
 final backgroundImage = AssetImage('assets/images/round-2-nyc-grand-opening-9.jpg');
 final logoImage = AssetImage('assets/images/streetwear_events.png');
+
+const kGoogleApiKey = "AIzaSyD7ttooB3TLfcGtyuV1XHhHJsKjt6MTmV8";

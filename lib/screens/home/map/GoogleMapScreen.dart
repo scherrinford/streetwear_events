@@ -29,6 +29,9 @@ class MapSampleState extends State<MapSample> {
   late GoogleMapController mapController;
   Location _location = Location();
   late CameraPosition _initialCameraPosition;
+  List<Marker> allMarkers = [];
+
+  Completer<GoogleMapController> _controller = Completer();
 
   @override
   void initState(){
@@ -62,18 +65,19 @@ class MapSampleState extends State<MapSample> {
   }
 
   void _onMapCreated(GoogleMapController controller) {
-    mapController = controller;
-    _location.onLocationChanged.listen((l) {
-      _initialCameraPosition = CameraPosition(target: LatLng(l.latitude!, l.longitude!),zoom: 12);
-      mapController.animateCamera(
-        CameraUpdate.newCameraPosition(
-          CameraPosition(target: LatLng(l.latitude!, l.longitude!),zoom: 12),
-        ),
-      );
-    });
+    _controller.complete(controller);
+    // mapController = controller;
+    // _location.onLocationChanged.listen((l) {
+    //   _initialCameraPosition = CameraPosition(target: LatLng(l.latitude!, l.longitude!),zoom: 12);
+    //   mapController.animateCamera(
+    //     CameraUpdate.newCameraPosition(
+    //       CameraPosition(target: LatLng(l.latitude!, l.longitude!),zoom: 12),
+    //     ),
+    //   );
+    // });
   }
 
-  List<Marker> allMarkers = [];
+
 
   Widget _loadMap(){
     return StreamBuilder<List<PlaceLocation>>(
@@ -87,7 +91,7 @@ class MapSampleState extends State<MapSample> {
               position: new LatLng(marker.position.latitude, marker.position.longitude),
               infoWindow: InfoWindow(
                 title: marker.name,
-                snippet: marker.address + ", " + marker.city,
+                snippet: marker.address,
               ),
               onTap: () {
                 Navigator.of(context).push(MaterialPageRoute(builder: (context) => LocationDetailScreen(placeLocation: marker)));
