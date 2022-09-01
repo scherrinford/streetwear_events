@@ -7,18 +7,6 @@ import 'package:streetwear_events/models/place_location.dart';
 
 import 'location_detail_screen.dart';
 
-void main() => runApp(MyApp());
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Google Maps Demo',
-      home: MapSample(),
-    );
-  }
-}
-
 class MapSample extends StatefulWidget {
   @override
   State<MapSample> createState() => MapSampleState();

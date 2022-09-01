@@ -8,6 +8,7 @@ import 'package:streetwear_events/screens/home/AppDrawer.dart';
 import 'package:streetwear_events/screens/home/events/EventList.dart';
 import 'package:streetwear_events/screens/home/events/EventTile.dart';
 import 'package:streetwear_events/screens/home/map/GoogleMapScreen.dart';
+import 'package:streetwear_events/screens/home/online_shop/OnlineStoresListScreen.dart';
 import 'package:streetwear_events/screens/home/user_profile/UserProfileScreen.dart';
 import 'package:streetwear_events/utilities/constants.dart';
 
@@ -46,10 +47,7 @@ class _HomeState extends State<Home>{
     if(_selectedIndex == 0) return _homeScreen(context);
     else if(_selectedIndex == 1) return CalendarScreen();
     else if(_selectedIndex == 2) return MapSample();
-    else return Text(
-      'Index 2: Website',
-      style: optionStyle,
-    );
+    else return OnlineStoresListScreen();
   }
 
   Widget _homeScreen(BuildContext context){

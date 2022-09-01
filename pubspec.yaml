@@ -46,6 +46,7 @@ dependencies:
   cloud_firestore_platform_interface: 5.7.1
   firebase_auth_platform_interface: ^6.5.3
   equatable: ^2.0.3
+  url_launcher: ^6.1.5
 
 
 
