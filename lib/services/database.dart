@@ -50,7 +50,7 @@ class DatabaseService{
 
     List<UserData> _userListFromSnapshot(QuerySnapshot snapshot){
         return snapshot.docs.map((doc){
-            return UserData.fromJson(doc.data() as Map<String,dynamic>, savedEventsList!);
+            return UserData.fromJson(doc.data() as Map<String,dynamic>);
         }).toList();
     }
 

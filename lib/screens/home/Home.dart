@@ -50,6 +50,54 @@ class _HomeState extends State<Home>{
     else return OnlineStoresListScreen();
   }
 
+  Widget _profilesList(BuildContext context){
+    return StreamBuilder<List<UserData>>(stream: UserData.getPartnersList(), builder: (context, snapshot) {
+      if (snapshot.hasError){
+        return Text("No profiles here");
+      }else if (snapshot.hasData){
+        final _user = snapshot.data;
+        return ListView(
+          shrinkWrap: true,
+          scrollDirection: Axis.horizontal,
+          children: _user!.map(_profilesTile).toList(),
+        );
+      }else{
+        return Center(child: CircularProgressIndicator());
+      }
+    });
+  }
+
+  Widget _profilesTile(UserData user){
+    return InkWell(
+      onTap: () {
+        Navigator.of(context).push(MaterialPageRoute(builder: (context) => UserProfileScreen(user: user)));
+      },
+      child: Container(
+          margin: const EdgeInsets.only(right: 20),
+          width: 70,
+          child: Column(
+            children: [
+              Container(
+
+                width: 70,
+                height: 70,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(50),
+                  image: new DecorationImage(
+                    image: backgroundImage,
+                    fit: BoxFit.cover, //BoxFit.fitWidth,
+                  ),
+                ),
+
+              ),
+              SizedBox(height: 10),
+              Text(user.name!, overflow: TextOverflow.clip, textAlign: TextAlign.center,),
+            ]
+          )
+      )
+    );
+  }
+
   Widget _homeScreen(BuildContext context){
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -80,38 +128,39 @@ class _HomeState extends State<Home>{
         SizedBox(height: 40),
         Container(
           margin: const EdgeInsets.only(left: 20),
-          child: Text("Followed profiles", style: smallTitleTextStyle),
+          child: Text("Partners profiles", style: smallTitleTextStyle),
         ),
         SizedBox(height: 20),
         Container(
-          height: 70,
+          height: 120,
             margin: const EdgeInsets.only(left: 20),
-            child: ListView.builder(
-                shrinkWrap: true,
-                itemCount: 7,
-                scrollDirection: Axis.horizontal,
-                itemBuilder: (BuildContext context, int index){
-                  return
-                    InkWell(
-                      onTap: () {
-                        Navigator.of(context).push(MaterialPageRoute(builder: (context) => UserProfileScreen(user: context.read<UserData>())));
-                      },
-                      child: Container(
-                        margin: const EdgeInsets.only(right: 20),
-                        width: 70,
-                        height: 70,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(50),
-                          image: new DecorationImage(
-                            image: backgroundImage,
-                            fit: BoxFit.cover, //BoxFit.fitWidth,
-                          ),
-                        ),
-
-                      ),
-                    );
-                }
-            )
+            child: _profilesList(context),
+            // ListView.builder(
+            //     shrinkWrap: true,
+            //     itemCount: 7,
+            //     scrollDirection: Axis.horizontal,
+            //     itemBuilder: (BuildContext context, int index){
+            //       return
+            //         InkWell(
+            //           onTap: () {
+            //             Navigator.of(context).push(MaterialPageRoute(builder: (context) => UserProfileScreen(user: context.read<UserData>())));
+            //           },
+            //           child: Container(
+            //             margin: const EdgeInsets.only(right: 20),
+            //             width: 70,
+            //             height: 70,
+            //             decoration: BoxDecoration(
+            //               borderRadius: BorderRadius.circular(50),
+            //               image: new DecorationImage(
+            //                 image: backgroundImage,
+            //                 fit: BoxFit.cover, //BoxFit.fitWidth,
+            //               ),
+            //             ),
+            //
+            //           ),
+            //         );
+            //     }
+            // )
         ),
       ],
     );
