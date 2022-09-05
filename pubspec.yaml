@@ -48,6 +48,8 @@ dependencies:
   equatable: ^2.0.3
   url_launcher: ^6.1.5
 
+  file_picker: ^5.0.1
+
 
 
 

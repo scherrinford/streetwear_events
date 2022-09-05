@@ -1,16 +1,16 @@
+
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:streetwear_events/models/user_data.dart';
-import 'package:streetwear_events/screens/home/events/DetailScreen.dart';
 import 'package:streetwear_events/screens/home/Home.dart';
 import 'package:streetwear_events/services/auth.dart';
 import 'package:streetwear_events/services/database.dart';
 import 'package:streetwear_events/utilities/constants.dart';
-import 'package:google_maps_webservice/places.dart';
-import 'package:google_api_headers/google_api_headers.dart';
 import 'package:google_place/google_place.dart';
+
 
 class AddNewEventsScreen extends StatefulWidget{
   @override
@@ -33,6 +33,7 @@ class _AddNewEventsScreenState extends State<StatefulWidget>{
   String _location = '';
   String _city = '';
   String _description = '';
+  String _photoUrl = '';
 
   final _formKey = GlobalKey<FormState>();
 
@@ -43,6 +44,8 @@ class _AddNewEventsScreenState extends State<StatefulWidget>{
 
   late FocusNode focusNode;
 
+  FilePickerResult? _filePickerResult;
+  String _fileName = '';
 
   @override
   void initState() {
@@ -243,7 +246,39 @@ class _AddNewEventsScreenState extends State<StatefulWidget>{
                   ),
                 ),
                 SizedBox(height: 20),
-
+                OutlinedButton.icon(
+                    onPressed: () async {
+                      _filePickerResult = await FilePicker.platform.pickFiles(
+                        type: FileType.custom,
+                        allowedExtensions: ['jpg', 'png'],
+                      );
+                      if (_filePickerResult != null) {
+                        _photoUrl = _filePickerResult!.files.single.path!;
+                        setState(() {
+                          _fileName = _filePickerResult!.files.single.name;
+                        });
+                        print(_photoUrl);
+                        print(_filePickerResult!.files.single.name);
+                      } else {
+                        // User canceled the picker
+                      }
+                    },
+                    icon: Icon(
+                      Icons.add,
+                      color: Colors.black54,
+                    ),
+                    label: Text(
+                      'SELECT IMAGE',
+                      style: TextStyle(
+                        color: Colors.black54,
+                        letterSpacing: 1.5,
+                        fontSize: 18.0,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: 'OpenSans',
+                      ),
+                    ),
+                ),
+                if(_fileName!='')Text(_fileName),
                 SizedBox(height: 20),
                 RaisedButton(
                   padding: EdgeInsets.all(15.0),
