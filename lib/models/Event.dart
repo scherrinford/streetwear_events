@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:streetwear_events/models/user_data.dart';
 
 class Event{
   final String id;
@@ -28,6 +29,11 @@ class Event{
       'description' : description,
       'uid' : uid
     };
+  }
+
+  static Stream<List<Event>> getListOfEventsByUser(String uid){
+    return FirebaseFirestore.instance.collection('events').where("uid", isEqualTo: uid).snapshots().map((snapshot)
+    => snapshot.docs.map((doc) => Event.fromJson(doc.data())).toList());
   }
 
   static Event fromJson(Map<String,dynamic> data) => Event(

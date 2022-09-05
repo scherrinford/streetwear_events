@@ -4,6 +4,9 @@ import 'package:streetwear_events/models/user_data.dart';
 import 'package:streetwear_events/screens/home/events/EventList.dart';
 import 'package:streetwear_events/utilities/constants.dart';
 
+import '../../../models/Event.dart';
+import '../events/EventTile.dart';
+
 class UserProfileScreen extends StatefulWidget {
 
   final UserData user;
@@ -15,7 +18,27 @@ class UserProfileScreen extends StatefulWidget {
 class _UserProfileScreenState extends State<UserProfileScreen> {
 
   Widget _listViewTab(BuildContext context){
-    return EventList(Axis.horizontal, 10, 0);
+    return StreamBuilder<List<Event>>(stream: Event.getListOfEventsByUser(widget.user.uid), builder: (context, snapshot) {
+      if (snapshot.hasError){
+        return Text("No events here");
+      }else if (snapshot.hasData){
+        final _events = snapshot.data;
+        return ListView(
+          scrollDirection: Axis.horizontal,
+          children: _events!.map(eventTile).toList(),
+        );
+      }else{
+        return Center(child: CircularProgressIndicator());
+      }
+    });
+    //return EventList(Axis.horizontal, 10, 0);
+  }
+
+  Widget eventTile(Event event){
+    return Container(
+      margin: EdgeInsets.only(right: 10, top: 0),
+      child: EventTile(event: event),
+    );
   }
 
   Widget _buildSocialBtn(Function onTap, AssetImage logo) {
