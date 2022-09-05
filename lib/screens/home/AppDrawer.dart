@@ -23,9 +23,9 @@ class AppDrawer extends StatefulWidget {
 }
 
 class _AppDrawerState extends State<AppDrawer> {
-  DatabaseService _databaseService =
-      DatabaseService(uid: FirebaseAuth.instance.currentUser!.uid);
-  late UserData user;
+
+  final AuthService _auth = AuthService();
+  late UserData _userData;
 
   Widget _logIn() {
     return ListTile(
@@ -52,20 +52,8 @@ class _AppDrawerState extends State<AppDrawer> {
     return ListTile(
       leading: Icon(Icons.account_circle),
       title: Text('Profile'),
-      onTap: () async {
-        // final currentUserId = Provider.of<UserData>(context, listen: false);
-        // final moviesRef = FirebaseFirestore.instance.collection('users').withConverter<UserData>( ///TODO refactoring
-        //   fromFirestore: (snapshot, _) => UserData.fromFirestore(snapshot.data()),
-        //   toFirestore: (movie, _) => movie.toMap(),
-        // );
-        // print(currentUserId.uid);
-        // UserData currentUser = _databaseService.getUserById(user?.uid)
-        //     as UserData; //moviesRef.doc(currentUserId.uid).get().then((snapshot) => snapshot.data() );
-        // print(currentUser.name);
-        // Navigator.of(context).push(MaterialPageRoute(
-        //     builder: (context) => UserProfileScreen(
-        //           user: currentUser,
-        //         ))); //
+      onTap: () {
+        Navigator.of(context).push(MaterialPageRoute(builder: (context) => UserProfileScreen(user: _userData)));
       },
     );
   }
@@ -123,7 +111,7 @@ class _AppDrawerState extends State<AppDrawer> {
     // print(currentUser.name);
   }
 
-  Widget _loggedUser(BuildContext context, AuthService _auth) {
+  Widget _loggedUser() {
     return Drawer(
       child: ListView(
         padding: EdgeInsets.zero,
@@ -132,12 +120,26 @@ class _AppDrawerState extends State<AppDrawer> {
             decoration: BoxDecoration(
               color: themeDarkColor,
             ),
-            child: Text(
-              "user.name",
-              style: TextStyle(
-                color: themeLightColor,
-                fontSize: 24,
-              ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  _userData.name!,
+                  style: TextStyle(
+                    color: themeLightColor,
+                    fontSize: 24,
+                  ),
+                ),
+                SizedBox(height: 10),
+                // Text(
+                //   _userData.email!,
+                //   style: TextStyle(
+                //     color: themeLightColor,
+                //     fontSize: 12,
+                //   ),
+                // ),
+              ]
             ),
           ),
           _profile(),
@@ -177,18 +179,29 @@ class _AppDrawerState extends State<AppDrawer> {
   @override
   Widget build(BuildContext context) {
     // https://firebase.flutter.dev/docs/auth/usage/
-    user = Provider.of<UserData>(context);
-    print(user.name);
+    var user = Provider.of<UserData>(context);
     final AuthService _auth = AuthService();
 
-    // final FirebaseAuth auth = FirebaseAuth.instance;
-    // final User? user = auth.currentUser;
+    return StreamBuilder<UserData>(
+        stream: UserData.getCurrentUser(user.uid),
+        builder: (context,snapshot) {
+          print(snapshot.error);
+          print(snapshot.data?.uid);
+          if (snapshot.hasData) {
+            _userData = snapshot.data!;
+            return _loggedUser();
+          } else{
+            return _unloggedUser(context);
+          }
+        }
+    );
+
 
     // print(_auth.us.name);
-    if (user == null) {
-      return _unloggedUser(context);
-    } else {
-      return _loggedUser(context, _auth);
-    }
+    // if (user == null) {
+    //   return _unloggedUser(context);
+    // } else {
+    //   return _loggedUser(context, _auth);
+    // }
   }
 }

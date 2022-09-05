@@ -77,7 +77,7 @@ class DatabaseService{
     }
 
     Stream<UserData> getUserById(String? id){
-        final Query user = usersCollection.where("uId",isEqualTo: id);
+        final Query user = usersCollection.where("uid",isEqualTo: id);
         return user.snapshots().map((snapshot) => snapshot.docs.map((document) => UserData.fromSnapchot(document, savedEventsList!)).toList().elementAt(0)) ;
     }
 

@@ -66,6 +66,11 @@ class UserData{
     return FirebaseFirestore.instance.collection('users').snapshots().map((snapshot)
     => snapshot.docs.map((doc) => UserData.fromJson(doc.data())).toList());
   }
+  
+  static Stream<UserData> getCurrentUser(String uid){
+    return FirebaseFirestore.instance.collection('users').where("uid", isEqualTo: uid).snapshots().map((snapshot)
+    => snapshot.docs.map((doc) => UserData.fromJson(doc.data())).toList().elementAt(0));
+  }
 
   UserData.fromSnapchot(DocumentSnapshot snapshot, List<Event> savedEventsList)
       : uid = snapshot['uid'],

@@ -168,54 +168,56 @@ class _HomeState extends State<Home>{
 
   @override
   Widget build(BuildContext context) {
-    final User? user = auth.currentUser;
-    return Scaffold(
-      body: Center(
-        child: _selectScreen(context),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.calendar_today),
-            label: 'Calendar',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.map_outlined),
-            label: 'Map',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.web),
-            label: 'Website',
-          ),
-        ],
-        currentIndex: _selectedIndex,
-        unselectedItemColor: themeDarkColor,
-        selectedItemColor: themeDarkColor,
-        onTap: _onItemTapped,
-      ),
-      appBar: BaseAppBar(
-        title: Text("Streetwear Events"),
-        appBar: AppBar(),
-        widgets: <Widget>[Icon(Icons.more_vert)]
-      ),
-      endDrawer: AppDrawer(),
-      floatingActionButton: new Visibility(
-        visible: _isLogged,
-        child: FloatingActionButton(
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => AddNewEventsScreen()),
-            );
-          },
-          backgroundColor: themeDarkColor,
-          child: const Icon(Icons.add),
+    final user = Provider.of<UserData>(context);
+    print(user.uid);
+    return  Scaffold(
+        body: Center(
+          child: _selectScreen(context),
         ),
-      )
+        bottomNavigationBar: BottomNavigationBar(
+          items: const <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+              icon: Icon(Icons.home),
+              label: 'Home',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.calendar_today),
+              label: 'Calendar',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.map_outlined),
+              label: 'Map',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.web),
+              label: 'Website',
+            ),
+          ],
+          currentIndex: _selectedIndex,
+          unselectedItemColor: themeDarkColor,
+          selectedItemColor: themeDarkColor,
+          onTap: _onItemTapped,
+        ),
+        appBar: BaseAppBar(
+            title: Text("Streetwear Events"),
+            appBar: AppBar(),
+            widgets: <Widget>[Icon(Icons.more_vert)]
+        ),
+        endDrawer: AppDrawer(),
+        floatingActionButton: new Visibility(
+          visible: _isLogged,
+          child: FloatingActionButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => AddNewEventsScreen()),
+              );
+            },
+            backgroundColor: themeDarkColor,
+            child: const Icon(Icons.add),
+          ),
+        )
     );
   }
 
