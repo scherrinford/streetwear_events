@@ -50,8 +50,7 @@ class UserData{
     };
   }
 
-  factory UserData.fromJson(Map<String, dynamic> json) {
-    return UserData(
+  static UserData fromJson(Map<String, dynamic> json) => UserData(
       uid: json['uid'] as String,
       email: json['email'] as String,
       phone: json['phone'] as String,
@@ -60,14 +59,13 @@ class UserData{
       description: json['description'] as String,
       // savedEventsList: savedEventsList,
     );
-  }
 
   static Stream<List<UserData>> getPartnersList(){
     return FirebaseFirestore.instance.collection('users').snapshots().map((snapshot)
     => snapshot.docs.map((doc) => UserData.fromJson(doc.data())).toList());
   }
   
-  static Stream<UserData> getCurrentUser(String uid){
+  static Stream<UserData> getUserById(String uid){
     return FirebaseFirestore.instance.collection('users').where("uid", isEqualTo: uid).snapshots().map((snapshot)
     => snapshot.docs.map((doc) => UserData.fromJson(doc.data())).toList().elementAt(0));
   }

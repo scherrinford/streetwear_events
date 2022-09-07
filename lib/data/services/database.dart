@@ -81,9 +81,9 @@ class DatabaseService{
         return myproduct.snapshots().map((snapshot) => snapshot.docs.map((document) => Event.fromSnapchot(document)).toList().elementAt(0)) ;
     }
 
-    Stream<UserData> getUserById(String? id){
-        final Query user = usersCollection.where("uid",isEqualTo: id);
-        return user.snapshots().map((snapshot) => snapshot.docs.map((document) => UserData.fromSnapchot(document, savedEventsList!)).toList().elementAt(0)) ;
+    Stream<UserData> getUserById(String id){
+        return FirebaseFirestore.instance.collection('users').where("uid", isEqualTo: id).snapshots().map((snapshot)
+        => snapshot.docs.map((doc) => UserData.fromJson(doc.data())).toList().elementAt(0));
     }
 
     Stream<Event> getSavedEventsList(String id){

@@ -183,7 +183,7 @@ class _AppDrawerState extends State<AppDrawer> {
     final AuthService _auth = AuthService();
 
     return StreamBuilder<UserData>(
-        stream: UserData.getCurrentUser(user.uid),
+        stream: UserData.getUserById(user.uid),
         builder: (context,snapshot) {
           print(snapshot.error);
           print(snapshot.data?.uid);

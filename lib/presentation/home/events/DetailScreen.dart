@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 import 'package:streetwear_events/data/models/user_data.dart';
 import 'package:streetwear_events/data/models/event.dart';
 import 'package:streetwear_events/data/services/database.dart';
+import 'package:streetwear_events/presentation/home/user_profile/UserProfileScreen.dart';
 import 'package:streetwear_events/utilities/constants.dart';
 
 import '../AppBar.dart';
@@ -26,6 +27,26 @@ class DetailScreen extends StatefulWidget{
 class _DetailScreenState extends State<DetailScreen> {
 
   late UserData user;
+
+  Widget _setUser(){
+    return StreamBuilder<UserData>(
+        stream: UserData.getUserById(widget.event.uid),
+        builder: (context, snapshot) {
+          if (snapshot.hasError){
+            return Text("User doesn't exists anymore");
+          }else if (snapshot.hasData) {
+            user =  snapshot.data!;
+            return TextButton(
+                onPressed: () {
+                  Navigator.push( context, MaterialPageRoute(builder: (context) => UserProfileScreen(user: user)),);
+                },
+                child: Text(user.name!,style: smallTitleTextStyle));
+          }else{
+            return Center(child: CircularProgressIndicator());
+          }
+        }
+    );
+  }
 
   Stream<Event> getProductById(String id){
     final Query myproduct = FirebaseFirestore.instance.collection('events').where("productId",isEqualTo: id);
@@ -85,17 +106,14 @@ class _DetailScreenState extends State<DetailScreen> {
                       //crossAxisAlignment: CrossAxisAlignment.stretch,
                       //mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
-                        Row(
-                          children: [
-                            Text(widget.event.name, style: titleTextStyle, softWrap: true, overflow: TextOverflow.fade,),//Text("Targi Jestem Vintage! #6", style: titleTextStyle),
-                          ],
-                        ),
+                        Text(widget.event.name, style: titleTextStyle, softWrap: true, overflow: TextOverflow.fade,),//Text("Targi Jestem Vintage! #6", style: titleTextStyle),
+
                         SizedBox(height: 15),
                         Row(
                           children: [
                             Icon(Icons.location_on, color: Colors.black54),
                             SizedBox(width: 5),
-                            Text(widget.event.location + ", Warszawa", style: TextStyle(color: Colors.black54)),
+                            Text(widget.event.location, style: TextStyle(color: Colors.black54)),
                           ],
                         ),
                         SizedBox(height: 10),
@@ -110,6 +128,7 @@ class _DetailScreenState extends State<DetailScreen> {
                         Text("Organizer", style: smallTitleTextStyle),
                         SizedBox(height: 20),
                         Row(
+                          mainAxisSize: MainAxisSize.min,
                           children: [
                             Container(
                               margin: const EdgeInsets.only(right: 20),
@@ -123,7 +142,7 @@ class _DetailScreenState extends State<DetailScreen> {
                                 ),
                               ),
                             ),
-                            Text(widget.event.uid, style: smallTitleTextStyle)
+                            _setUser(),
                           ],
                         ),
                         SizedBox(height: 20),
