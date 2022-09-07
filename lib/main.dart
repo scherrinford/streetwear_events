@@ -1,14 +1,14 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:streetwear_events/models/user_data.dart';
-import 'package:streetwear_events/models/Event.dart';
-import 'package:streetwear_events/screens/authenticate/authenticate_wrapper.dart';
-import 'package:streetwear_events/screens/authenticate/wrapper.dart';
-import 'package:streetwear_events/screens/home/Home.dart';
+import 'package:streetwear_events/data/models/user_data.dart';
+import 'package:streetwear_events/data/models/event.dart';
+import 'package:streetwear_events/presentation/authenticate/authenticate_wrapper.dart';
+import 'package:streetwear_events/presentation/authenticate/wrapper.dart';
+import 'package:streetwear_events/presentation/home/Home.dart';
 import 'package:provider/provider.dart';
-import 'package:streetwear_events/services/auth.dart';
-import 'package:streetwear_events/services/database.dart';
+import 'package:streetwear_events/data/services/auth.dart';
+import 'package:streetwear_events/data/services/database.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
