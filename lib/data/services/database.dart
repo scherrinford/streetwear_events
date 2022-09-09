@@ -26,13 +26,16 @@ class DatabaseService{
         return eventsCollection.doc(event.id).set(event.toMap());
     }
 
-    Future saveEvent(String name, String description, String location, DateTime date) async{
-        return await eventsCollection.doc().set({
+    Future saveEvent(String name, String description, String location, DateTime date, String city) async{
+        DocumentReference docReference = FirebaseFirestore.instance.collection('locations').doc();
+        return await docReference.set({
             'name' : name,
             'date' : date,
             'location' : location,
             'description' : description,
-            'uid' : uid
+            'uid' : uid,
+            'id' : docReference.id,
+            'city' : city
         });
     }
 
@@ -59,9 +62,10 @@ class DatabaseService{
         }).toList();
     }
 
-    Stream<List<UserData>> getUsersList() {
-        return usersCollection.snapshots().map((snapshot) => snapshot.docs.map((document) => UserData.fromFirestore(document.data() as Map<String,dynamic>, savedEventsList!)).toList());
-    }
+    // Stream<List<UserData>> getUsersList() {
+    //     return usersCollection.snapshots().map((snapshot) => snapshot.docs.map((document) =>
+    //         UserData.fromFirestore(document.data() as Map<String,dynamic>, savedEventsList!)).toList());
+    // }
 
     Future<void> removeProduct(String productId){
         return eventsCollection.doc(productId).delete();
@@ -73,6 +77,22 @@ class DatabaseService{
             'name' : name,
             'phone' : phone,
             'email' : email,
+            'savedEventsList' : [],
+            'description' : "",
+            'photoUrl' : "",
+            'type' : "basic"
+        });
+    }
+
+    Future updateUserPhoto(String photoUrl) async{
+        return await usersCollection.doc(uid).set({
+            'photoUrl' : photoUrl,
+        });
+    }
+
+    Future updateUsersFollowedList(List<String> savedEventsList) async{
+        return await usersCollection.doc(uid).set({
+            'savedEventsList' : savedEventsList,
         });
     }
 

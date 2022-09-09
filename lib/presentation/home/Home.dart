@@ -99,31 +99,32 @@ class _HomeState extends State<Home>{
   }
 
   Widget _homeScreen(BuildContext context){
-    return Column(
+    return SingleChildScrollView(
+        child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SizedBox(height: 40),
+        SizedBox(height: 20),
         Container(
-          margin: const EdgeInsets.only(left: 20, right: 20),
-          child: Row(
-            //crossAxisAlignment: CrossAxisAlignment.stretch,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text("Events", style: titleTextStyle),
-              TextButton(
-                  onPressed: () {
-                    Navigator.of(context).push(MaterialPageRoute(builder: (context) => AllEventsList()));
-                  },
-                  child: Text("Show more >"))
-            ],
-          )
+            margin: const EdgeInsets.only(left: 20, right: 20),
+            child: Row(
+              //crossAxisAlignment: CrossAxisAlignment.stretch,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text("Events", style: titleTextStyle),
+                TextButton(
+                    onPressed: () {
+                      Navigator.of(context).push(MaterialPageRoute(builder: (context) => AllEventsList()));
+                    },
+                    child: Text("Show more >"))
+              ],
+            )
         ),
-        SizedBox(height: 40),
+        SizedBox(height: 20),
         Container(
-            margin: const EdgeInsets.only(left: 20),
-            width: double.maxFinite,
-            height: 237,
-            child: EventList(Axis.horizontal, 10, 0),
+          margin: const EdgeInsets.only(left: 20),
+          width: double.maxFinite,
+          height: 237,
+          child: EventList(Axis.horizontal, 10, 0, DateTime.now(), DateTime(DateTime.now().year+2, DateTime.now().month, 0)),
         ),
         SizedBox(height: 40),
         Container(
@@ -133,37 +134,11 @@ class _HomeState extends State<Home>{
         SizedBox(height: 20),
         Container(
           height: 120,
-            margin: const EdgeInsets.only(left: 20),
-            child: _profilesList(context),
-            // ListView.builder(
-            //     shrinkWrap: true,
-            //     itemCount: 7,
-            //     scrollDirection: Axis.horizontal,
-            //     itemBuilder: (BuildContext context, int index){
-            //       return
-            //         InkWell(
-            //           onTap: () {
-            //             Navigator.of(context).push(MaterialPageRoute(builder: (context) => UserProfileScreen(user: context.read<UserData>())));
-            //           },
-            //           child: Container(
-            //             margin: const EdgeInsets.only(right: 20),
-            //             width: 70,
-            //             height: 70,
-            //             decoration: BoxDecoration(
-            //               borderRadius: BorderRadius.circular(50),
-            //               image: new DecorationImage(
-            //                 image: backgroundImage,
-            //                 fit: BoxFit.cover, //BoxFit.fitWidth,
-            //               ),
-            //             ),
-            //
-            //           ),
-            //         );
-            //     }
-            // )
+          margin: const EdgeInsets.only(left: 20),
+          child: _profilesList(context),
         ),
       ],
-    );
+    ));
   }
 
   @override

@@ -12,17 +12,19 @@ class UserData{
   final String? phone;
   final String? photoUrl;
   final String? description;
+  final String? type;
 
-  // List<Event>? savedEventsList;
+  List<String>? savedEventsList;
 
   UserData({
     required this.uid,
     this.name,
     this.email,
     this.phone,
-    // this.savedEventsList,
+    this.savedEventsList,
     this.photoUrl,
     this.description,
+    this.type,
   });
 
   // String getUserId(){
@@ -36,6 +38,7 @@ class UserData{
       'email' : email,
       'phone' : phone,
       'description' : description,
+      'type' : type,
     };
   }
 
@@ -47,6 +50,7 @@ class UserData{
       'phone' : phone,
       'photoUrl' : photoUrl,
       'description' : description,
+      'type' : type,
     };
   }
 
@@ -57,11 +61,12 @@ class UserData{
       name: json['name'] as String,
       photoUrl: json['photoUrl'] as String,
       description: json['description'] as String,
-      // savedEventsList: savedEventsList,
+      type: json['type'] as String,
+      savedEventsList: List.from(json['savedEventsList']),
     );
 
   static Stream<List<UserData>> getPartnersList(){
-    return FirebaseFirestore.instance.collection('users').snapshots().map((snapshot)
+    return FirebaseFirestore.instance.collection('users').where("type", isEqualTo: "pro").snapshots().map((snapshot)
     => snapshot.docs.map((doc) => UserData.fromJson(doc.data())).toList());
   }
   
@@ -70,22 +75,59 @@ class UserData{
     => snapshot.docs.map((doc) => UserData.fromJson(doc.data())).toList().elementAt(0));
   }
 
-  UserData.fromSnapchot(DocumentSnapshot snapshot, List<Event> savedEventsList)
+  static Future<void> addEventToFollowedList(String uid, String eventId) async {
+    List<String> eventsIdsList = [];
+    List<String> changeDataList = [];
+    var userCollection = FirebaseFirestore.instance.collection('users');
+    var docSnapshot = await userCollection.doc(uid).get();
+    if (docSnapshot.exists) {
+      Map<String, dynamic> data = docSnapshot.data()!;
+      var array =  data['savedEventsList'];
+      if(List<String>.from(array).length>0){
+        eventsIdsList = List<String>.from(array);
+      }
+    }
+    print(eventId);
+    print(eventsIdsList);
+    var collection = FirebaseFirestore.instance.collection('users');
+    if(eventsIdsList.contains(eventId)){
+      changeDataList.add(eventId);
+      collection
+          .doc(uid) //<-- Document ID
+          .update({'savedEventsList': FieldValue.arrayRemove(changeDataList)}) // <-- Add data
+          .then((_) => print('Updated'))
+          .catchError((error) => print('Add failed: $error'));
+    }else{
+      changeDataList.add(eventId);
+      collection
+          .doc(uid) //<-- Document ID
+          .update({'savedEventsList': FieldValue.arrayUnion(changeDataList)}) // <-- Add data
+          .then((_) => print('Updated'))
+          .catchError((error) => print('Add failed: $error'));
+    }
+    print(eventsIdsList);
+
+
+  }
+
+  UserData.fromSnapshot(DocumentSnapshot snapshot, List<String> savedEventsList)
       : uid = snapshot['uid'],
         name = snapshot['name'],
         email = snapshot['email'],
         phone = snapshot['phone'],
         photoUrl = snapshot['photoUrl'],
-        description = snapshot['description'];
+        description = snapshot['description'],
+        type = snapshot['type'];
         // savedEventsList = savedEventsList;
 
 
-  UserData.fromFirestore(Map<String, dynamic> firestore, List<Event> savedEventsList)
+  UserData.fromFirestore(Map<String, dynamic> firestore, List<String> savedEventsList)
       : uid = firestore['uid'],
         name = firestore['name'],
         email = firestore['email'],
         phone = firestore['phone'],
         photoUrl = firestore['photoUrl'],
+        type = firestore['type'],
         description = firestore['description'];
         // savedEventsList = savedEventsList;
 

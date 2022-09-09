@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:streetwear_events/data/models/user_data.dart';
 
 import 'package:streetwear_events/presentation/authenticate/authenticate_wrapper.dart';
+import 'package:streetwear_events/presentation/authenticate/wrapper.dart';
 import 'package:streetwear_events/presentation/home/user_profile/UserProfileScreen.dart';
 import 'package:streetwear_events/presentation/home/events/AddNewEventsScreen.dart';
 import 'package:streetwear_events/data/services/auth.dart';
@@ -44,6 +45,7 @@ class _AppDrawerState extends State<AppDrawer> {
       title: Text('Log out'),
       onTap: () async {
         await auth.signOut();
+        Navigator.of(context).push(MaterialPageRoute(builder: (context) => Wrapper()));
       },
     );
   }
@@ -144,9 +146,11 @@ class _AppDrawerState extends State<AppDrawer> {
           ),
           _profile(),
           _settings(),
-          _addNewEvent(),
-          _addOnlineStore(),
-          _addStationaryStore(),
+          if(_userData.type == "pro") _addNewEvent(),
+          if(_userData.type == "pro")  _addOnlineStore(),
+          if(_userData.type == "pro") _addStationaryStore(),
+
+
           _logOut(_auth)
         ],
       ),
@@ -170,7 +174,7 @@ class _AppDrawerState extends State<AppDrawer> {
               ),
             ),
           ),
-          _logIn()
+          _logIn(),
         ],
       ),
     );

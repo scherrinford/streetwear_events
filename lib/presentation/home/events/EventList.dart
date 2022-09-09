@@ -12,7 +12,9 @@ class EventList extends StatefulWidget{
   final Axis _axis;
   final double _marginRight;
   final double _marginTop;
-  const EventList(this._axis, this._marginRight, this._marginTop);
+  final DateTime startDate;
+  final DateTime endDate;
+  const EventList(this._axis, this._marginRight, this._marginTop, this.startDate, this.endDate);
   @override
   _EventListState createState() => _EventListState();
 }
@@ -23,31 +25,41 @@ class _EventListState extends State<EventList>{
 
   int tileCount = 4;
 
-  Widget _noFollowedEvents(BuildContext context){
-    return GestureDetector(
-      onTap: () => CalendarScreen(),
-      child: Card(
-          margin: const EdgeInsets.only(right: 20),
+  Widget _noFollowedEventsTile(BuildContext context){
+    return Card(
+        // margin: const EdgeInsets.only(right: 20),
           elevation: 5,
           color: themeLightColor,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
           ),
           child: Container(
-            width: 340,
-            height: 240,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20.0),
-              color: themeLightColor,
-            ),
-            child: Icon(
-              Icons.add,
-              size: 100,
-              color: Color(0x3EB4B2AB),
-            ),
+              alignment: AlignmentDirectional.center,
+              width: 340,
+              height: 240,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20.0),
+                color: themeLightColor,
+              ),
+              child: Text("No events yet")
+            // Icon(
+            //   Icons.add,
+            //   size: 100,
+            //   color: Color(0x3EB4B2AB),
+            // ),
           )
 
-      ),
+    );
+  }
+
+  Widget _noFollowedEvents(BuildContext context){
+    return Container(
+        margin: EdgeInsets.only(top: 20),
+        child: ListView(
+            children: [
+              _noFollowedEvents(context)
+            ]
+        )
     );
   }
 
@@ -75,15 +87,20 @@ class _EventListState extends State<EventList>{
     // }
 
 
-    return StreamBuilder<List<Event>>(stream: events, builder: (context, snapshot) {
+    return StreamBuilder<List<Event>>(stream: Event.getListOfEventsByDateRange(widget.startDate, widget.endDate), builder: (context, snapshot) {
       if (snapshot.hasError){
         return _noFollowedEvents(context);
       }else if (snapshot.hasData){
         final _events = snapshot.data;
-        return ListView(
-          scrollDirection: widget._axis,
-          children: _events!.map(eventTile).toList(),
-        );
+        if(_events!.length>0){
+          return ListView(
+            scrollDirection: widget._axis,
+            children: _events.map(eventTile).toList(),
+          );
+        }else{
+          return _noFollowedEvents(context);
+        }
+
       }else{
         return Center(child: CircularProgressIndicator());
       }

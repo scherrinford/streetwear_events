@@ -304,7 +304,7 @@ class _AddNewEventsScreenState extends State<StatefulWidget>{
                   onPressed:() async {
                     if (_formKey.currentState!.validate()) {
                         _date = new DateTime(_date.year, _date.month, _date.day, _time.hour, _time.minute);
-                        await DatabaseService(uid: user.uid).saveEvent(_name, _description, _location, _date);
+                        await DatabaseService(uid: user.uid).saveEvent(_name, _description, _location, _date, _city);
                         Navigator.push(
                           context,
                           MaterialPageRoute(builder: (context) => Home()),
